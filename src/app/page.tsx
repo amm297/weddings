@@ -11,7 +11,7 @@ export default function WeddingPage() {
   const weddingDate = new Date("2025-09-20T16:00:00");
 
   return (
-    <div className="flex flex-col min-h-dvh bg-background font-body">
+    <div id="home" className="flex flex-col min-h-dvh bg-background font-body">
       <main className="flex-grow">
         <Hero />
         <CountdownTimer targetDate={weddingDate} />
