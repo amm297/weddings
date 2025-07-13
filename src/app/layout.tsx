@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 // Import Firebase - this ensures it's initialized
 import "@/lib/firebase";
 import FirebaseInitializer from "@/components/FirebaseInitializer";
+import { Navigation } from "@/components/wedding/Navigation";
 
 export const metadata: Metadata = {
   title: "Olivia & Liam's Wedding",
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -31,6 +32,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
+        <Navigation />
         {children}
         <Toaster />
         <FirebaseInitializer />
