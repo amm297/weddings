@@ -8,6 +8,9 @@ let emulatorsConnected = false;
 
 /**
  * Connect to Firebase emulators in development environment
+ * Data persistence is handled via firebase.json configuration:
+ * - Data is automatically exported to .firebase-data/ when emulators stop
+ * - Data is automatically imported when emulators start
  */
 export function connectToEmulators() {
   // Only connect once and only in development
@@ -31,6 +34,7 @@ export function connectToEmulators() {
 
     emulatorsConnected = true;
     console.log("Connected to Firebase emulators successfully");
+    console.log("Emulator data persistence is enabled (.firebase-data/)");
   } catch (error) {
     console.error("Error connecting to Firebase emulators:", error);
   }

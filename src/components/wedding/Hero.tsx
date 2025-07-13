@@ -7,9 +7,14 @@ import { cn } from "@/lib/utils";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
 import { formatDate } from "@/lib/date-utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Hero() {
   const config = useWeddingConfig();
+  const pathname = usePathname();
+  
+  // Extract the slug from the pathname
+  const slug = pathname.split('/')[1];
 
   return (
     <section className="w-full py-20 md:py-32 lg:py-40 bg-accent">
@@ -38,7 +43,7 @@ export function Hero() {
                   "hover:bg-primary/90 transition-all"
                 )}
               >
-                <Link href="/rsvp">RSVP</Link>
+                <Link href={`/${slug}/rsvp`}>RSVP</Link>
               </Button>
             </div>
           </CardContent>

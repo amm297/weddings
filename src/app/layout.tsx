@@ -5,13 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 // Import Firebase - this ensures it's initialized
 import "@/lib/firebase";
 import FirebaseInitializer from "@/components/FirebaseInitializer";
-import { Navigation } from "@/components/wedding/Navigation";
-import { WeddingConfigProvider } from "@/providers/WeddingConfigProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "Olivia & Liam's Wedding",
-  description: "Join us to celebrate our special day!",
+  title: "Wedding Platform",
+  description: "A platform for wedding websites",
 };
 
 export default function RootLayout({
@@ -35,13 +33,8 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <FirebaseInitializer />
-        <WeddingConfigProvider>
-          <ThemeProvider>
-            <Navigation />
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </WeddingConfigProvider>
+        {children}
+        <Toaster />
       </body>
     </html>
   );

@@ -10,6 +10,7 @@ import { useWeddingConfig } from "@/hooks/use-wedding-config";
 export function CountdownTimer() {
   const config = useWeddingConfig();
   const targetDate = config.date.date;
+  console.log("targetDate", targetDate);
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -18,6 +19,7 @@ export function CountdownTimer() {
     seconds: 0,
     totalSeconds: 0,
     percentComplete: 0,
+    isWeddingDay: false,
   });
   const [isClient, setIsClient] = useState(false);
 
@@ -38,6 +40,7 @@ export function CountdownTimer() {
         seconds: 0,
         totalSeconds: 0,
         percentComplete: 0,
+        isWeddingDay: false,
       };
 
       if (difference > 0) {
@@ -58,6 +61,18 @@ export function CountdownTimer() {
           seconds: Math.floor((difference / 1000) % 60),
           totalSeconds: Math.floor(difference / 1000),
           percentComplete,
+          isWeddingDay: false,
+        };
+      } else {
+        // It's the wedding day or after
+        newTimeLeft = {
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          totalSeconds: 0,
+          percentComplete: 100,
+          isWeddingDay: true,
         };
       }
 
@@ -67,7 +82,13 @@ export function CountdownTimer() {
     setTimeLeft(calculateTimeLeft());
 
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      const currentTimeLeft = calculateTimeLeft();
+      setTimeLeft(currentTimeLeft);
+
+      // Clear interval if it's wedding day
+      if (currentTimeLeft.isWeddingDay) {
+        clearInterval(timer);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -84,7 +105,9 @@ export function CountdownTimer() {
     <section className="py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl md:text-4xl font-headline text-center mb-8 md:mb-12 text-foreground">
-          Cuenta atrás para nuestra boda
+          {timeLeft.isWeddingDay
+            ? "¡Llegó el día de nuestra boda!"
+            : "Cuenta atrás para nuestra boda"}
         </h2>
 
         <Card className="max-w-4xl mx-auto border-primary/20">
@@ -92,39 +115,52 @@ export function CountdownTimer() {
             <div className="mb-6">
               <Progress value={timeLeft.percentComplete} className="h-2" />
               <p className="text-sm text-muted-foreground text-center mt-2">
-                {timeLeft.percentComplete.toFixed(0)}% de la boda!
+                {timeLeft.isWeddingDay
+                  ? "¡Es hoy!"
+                  : `${timeLeft.percentComplete.toFixed(0)}% de la boda!`}
               </p>
             </div>
 
-            <div className="flex justify-center space-x-2 sm:space-x-4 md:space-x-8 text-center">
-              {isClient
-                ? timeUnits.map((unit) => (
-                    <Card
-                      key={unit.label}
-                      className={cn(
-                        "flex flex-col items-center p-2 rounded-lg w-20 md:w-28",
-                        "transition-all duration-300 ease-out border-primary/20",
-                        "hover:border-primary/50 hover:shadow-md"
-                      )}
-                    >
-                      <span className="text-4xl md:text-6xl font-bold font-headline text-primary">
-                        {String(unit.value).padStart(2, "0")}
-                      </span>
-                      <span className="text-sm md:text-base text-foreground/80 mt-1">
-                        {unit.label}
-                      </span>
-                    </Card>
-                  ))
-                : timeUnits.map((unit) => (
-                    <div
-                      key={unit.label}
-                      className="flex flex-col items-center p-2 rounded-lg w-20 md:w-28"
-                    >
-                      <Skeleton className="w-16 h-16 md:w-24 md:h-24" />
-                      <Skeleton className="w-12 h-4 mt-2" />
-                    </div>
-                  ))}
-            </div>
+            {timeLeft.isWeddingDay ? (
+              <div className="text-center py-8">
+                <p className="text-3xl md:text-4xl font-headline text-primary">
+                  ¡Llegó el día de nuestra boda!
+                </p>
+                <p className="text-lg mt-4 text-muted-foreground">
+                  Gracias por compartir este momento especial con nosotros
+                </p>
+              </div>
+            ) : (
+              <div className="flex justify-center space-x-2 sm:space-x-4 md:space-x-8 text-center">
+                {isClient
+                  ? timeUnits.map((unit) => (
+                      <Card
+                        key={unit.label}
+                        className={cn(
+                          "flex flex-col items-center p-2 rounded-lg w-20 md:w-28",
+                          "transition-all duration-300 ease-out border-primary/20",
+                          "hover:border-primary/50 hover:shadow-md"
+                        )}
+                      >
+                        <span className="text-4xl md:text-6xl font-bold font-headline text-primary">
+                          {String(unit.value).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm md:text-base text-foreground/80 mt-1">
+                          {unit.label}
+                        </span>
+                      </Card>
+                    ))
+                  : timeUnits.map((unit) => (
+                      <div
+                        key={unit.label}
+                        className="flex flex-col items-center p-2 rounded-lg w-20 md:w-28"
+                      >
+                        <Skeleton className="w-16 h-16 md:w-24 md:h-24" />
+                        <Skeleton className="w-12 h-4 mt-2" />
+                      </div>
+                    ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
