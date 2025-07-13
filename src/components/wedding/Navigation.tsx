@@ -1,68 +1,70 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { useNavigation } from "@/hooks/use-navigation";
 
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Details', href: '#details' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Registry', href: '#registry' },
-  { label: 'RSVP', href: '#rsvp' },
+  { label: "Details", href: "#details" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Registry", href: "#registry" },
+  { label: "RSVP", href: "#rsvp" },
 ];
 
 export function Navigation() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { isScrolled, activeSection } = useNavigation(navItems);
   const pathname = usePathname();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? 'bg-background/95 backdrop-blur-sm shadow-sm py-2'
-          : 'bg-transparent py-4'
+          ? "bg-background/95 backdrop-blur-sm shadow-sm py-2"
+          : "bg-transparent py-4"
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="font-headline text-2xl font-bold text-primary">
+        <div id="home" className="flex items-center justify-between">
+          <Link
+            href="#home"
+            className="font-headline text-2xl font-bold text-primary"
+          >
             O&L
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {navItems.map((item) => (
-              <Button
-                key={item.href}
-                variant="ghost"
-                size="sm"
-                asChild
-                className={cn(
-                  'font-headline text-base',
-                  pathname === item.href && 'text-primary'
-                )}
-              >
-                <Link href={item.href}>{item.label}</Link>
-              </Button>
-            ))}
-            <Button 
-              variant="default" 
-              size="sm" 
+            {navItems.map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href.startsWith("#") &&
+                  activeSection === item.href.substring(1));
+
+              return (
+                <Button
+                  key={item.href}
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                  className={cn(
+                    "font-headline text-base relative border-b-2 border-transparent transition-all",
+                    isActive &&
+                      "text-primary font-medium border-b-2 border-accent",
+                    "hover:text-primary hover:font-medium hover:border-accent"
+                  )}
+                >
+                  <Link href={item.href}>{item.label}</Link>
+                </Button>
+              );
+            })}
+            <Button
+              variant="default"
+              size="sm"
               className="ml-2 font-headline"
               asChild
             >
@@ -80,23 +82,33 @@ export function Navigation() {
             </SheetTrigger>
             <SheetContent side="right">
               <nav className="flex flex-col space-y-4 mt-8">
-                {navItems.map((item) => (
-                  <Button
-                    key={item.href}
-                    variant="ghost"
-                    size="lg"
-                    asChild
-                    className={cn(
-                      'justify-start font-headline text-lg',
-                      pathname === item.href && 'text-primary'
-                    )}
-                  >
-                    <Link href={item.href}>{item.label}</Link>
-                  </Button>
-                ))}
-                <Button 
-                  variant="default" 
-                  size="lg" 
+                {navItems.map((item) => {
+                  const isActive =
+                    pathname === item.href ||
+                    (item.href.startsWith("#") &&
+                      activeSection === item.href.substring(1));
+                  const isHome = item.href === "#home";
+
+                  return (
+                    <Button
+                      key={item.href}
+                      variant="ghost"
+                      size="lg"
+                      asChild
+                      className={cn(
+                        "justify-start font-headline text-lg relative border-b-2 border-transparent transition-all",
+                        isActive && "text-primary font-medium",
+                        isActive && !isHome && "border-accent",
+                        "hover:text-primary hover:font-medium hover:border-accent"
+                      )}
+                    >
+                      <Link href={item.href}>{item.label}</Link>
+                    </Button>
+                  );
+                })}
+                <Button
+                  variant="default"
+                  size="lg"
                   className="mt-4 font-headline w-full"
                   asChild
                 >
@@ -109,4 +121,4 @@ export function Navigation() {
       </div>
     </header>
   );
-} 
+}
