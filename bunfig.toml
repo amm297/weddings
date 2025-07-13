@@ -1,0 +1,17 @@
+[install]
+# Use exact versions when installing from registry
+exact = true
+
+# Install peer dependencies automatically
+peer = true
+
+# Don't generate a lockfile
+lockfile = true
+
+[test]
+# Use Bun's test runner
+preload = "./setup.ts"
+
+[debug]
+# Enable Bun's debugger
+navigation = true
