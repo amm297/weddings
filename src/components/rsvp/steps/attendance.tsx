@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { RSVPFormValues } from "@/types/RSVP";
+import { RSVPFormValues } from "@/db/rsvp-model";
 
 export default function AttendanceStep({
   form,

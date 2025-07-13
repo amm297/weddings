@@ -6,8 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { RSVPFormValues, rsvpSchema } from "@/types/RSVP";
+import { RSVPFormValues, rsvpSchema } from "@/db/rsvp-model";
 import { useRSVPFormSteps } from "@/hooks/use-rsvp-form-steps";
+import { rsvpModel } from "@/db";
 import NameStep from "./steps/name";
 import EmailStep from "./steps/email";
 import AttendanceStep from "./steps/attendance";
@@ -32,7 +33,6 @@ export default function RSVPForm() {
   });
 
   const {
-    currentStep,
     step,
     totalSteps,
     nextStep,
@@ -48,20 +48,17 @@ export default function RSVPForm() {
     setIsSubmitting(true);
 
     try {
-      // Here you would typically send the data to your backend/Firebase
-      console.log(data);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const rsvp = await rsvpModel.createOrUpdate(data.email, data);
 
       toast({
-        title: "RSVP enviado",
+        title: "RSVP guardado",
         description: "Gracias por confirmar tu asistencia.",
       });
 
       form.reset();
       resetSteps();
     } catch (error) {
+      console.error("Error saving RSVP:", error);
       toast({
         title: "Error",
         description:

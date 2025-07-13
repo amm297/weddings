@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { RSVPFormValues } from "@/types/RSVP";
+import { RSVPFormValues } from "@/db/rsvp-model";
 import { useFormSteps } from "./use-form-steps";
 
 export function useRSVPFormSteps(form: UseFormReturn<RSVPFormValues>) {

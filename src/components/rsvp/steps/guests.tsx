@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RSVPFormValues } from "@/types/RSVP";
+import { RSVPFormValues } from "@/db/rsvp-model";
 
 export default function GuestsStep({
   form,

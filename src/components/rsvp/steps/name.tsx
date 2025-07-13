@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RSVPFormValues } from "@/types/RSVP";
+import { RSVPFormValues } from "@/db/rsvp-model";
 
 export default function NameStep({
   form,

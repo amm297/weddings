@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { RSVPFormValues } from "@/types/RSVP";
+import { RSVPFormValues } from "@/db/rsvp-model";
 
 export default function DietaryStep({
   form,
