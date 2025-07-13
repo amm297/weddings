@@ -8,13 +8,11 @@ import { Footer } from "@/components/wedding/Footer";
 import { Separator } from "@/components/ui/separator";
 
 export default function WeddingPage() {
-  const weddingDate = new Date("2025-09-20T16:00:00");
-
   return (
     <div id="home" className="flex flex-col min-h-dvh bg-background font-body">
       <main className="flex-grow">
         <Hero />
-        <CountdownTimer targetDate={weddingDate} />
+        <CountdownTimer />
         <WeddingInfo />
         <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
         <PhotoGallery />

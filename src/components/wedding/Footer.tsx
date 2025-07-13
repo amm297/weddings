@@ -20,13 +20,6 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              <Calendar className="mr-2 h-4 w-4" /> Add to Calendar
-            </Button>
             <Button variant="default" size="sm">
               <Mail className="mr-2 h-4 w-4" /> Contact Us
             </Button>

@@ -5,12 +5,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useWeddingConfig } from "@/hooks/use-wedding-config";
 
-interface CountdownTimerProps {
-  targetDate: Date;
-}
+export function CountdownTimer() {
+  const config = useWeddingConfig();
+  const targetDate = config.date.date;
 
-export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -74,17 +74,17 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   }, [targetDate, isClient]);
 
   const timeUnits = [
-    { label: "Days", value: timeLeft.days },
-    { label: "Hours", value: timeLeft.hours },
-    { label: "Minutes", value: timeLeft.minutes },
-    { label: "Seconds", value: timeLeft.seconds },
+    { label: "Días", value: timeLeft.days },
+    { label: "Horas", value: timeLeft.hours },
+    { label: "Minutos", value: timeLeft.minutes },
+    { label: "Segundos", value: timeLeft.seconds },
   ];
 
   return (
     <section className="py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl md:text-4xl font-headline text-center mb-8 md:mb-12 text-foreground">
-          Countdown to Our Big Day
+          Cuenta atrás para nuestra boda
         </h2>
 
         <Card className="max-w-4xl mx-auto border-primary/20">
@@ -92,7 +92,7 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
             <div className="mb-6">
               <Progress value={timeLeft.percentComplete} className="h-2" />
               <p className="text-sm text-muted-foreground text-center mt-2">
-                {timeLeft.percentComplete.toFixed(0)}% of the way there!
+                {timeLeft.percentComplete.toFixed(0)}% de la boda!
               </p>
             </div>
 
