@@ -13,7 +13,7 @@ const navItems = [
   { label: "Detalles", href: "#details" },
   { label: "Galería", href: "#gallery" },
   { label: "Registro", href: "#registry" },
-  { label: "RSVP", href: "#rsvp" },
+  { label: "RSVP", href: "/rsvp" },
 ];
 
 export function Navigation() {
@@ -33,7 +33,7 @@ export function Navigation() {
       <div className="container mx-auto px-4 md:px-6">
         <div id="home" className="flex items-center justify-between">
           <Link
-            href="#home"
+            href="/"
             className="font-headline text-2xl font-bold text-primary"
           >
             {config.couple.person1.name} & {config.couple.person2.name}
@@ -43,7 +43,7 @@ export function Navigation() {
           <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive =
-                pathname === item.href ||
+                (item.href.startsWith("/") && pathname === item.href) ||
                 (item.href.startsWith("#") &&
                   activeSection === item.href.substring(1));
 
@@ -78,7 +78,7 @@ export function Navigation() {
               <nav className="flex flex-col space-y-4 mt-8">
                 {navItems.map((item) => {
                   const isActive =
-                    pathname === item.href ||
+                    (item.href.startsWith("/") && pathname === item.href) ||
                     (item.href.startsWith("#") &&
                       activeSection === item.href.substring(1));
                   const isHome = item.href === "#home";

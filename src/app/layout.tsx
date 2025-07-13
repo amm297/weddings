@@ -34,12 +34,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
+        <FirebaseInitializer />
         <WeddingConfigProvider>
           <ThemeProvider>
             <Navigation />
             {children}
             <Toaster />
-            <FirebaseInitializer />
           </ThemeProvider>
         </WeddingConfigProvider>
       </body>
