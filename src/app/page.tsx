@@ -6,7 +6,6 @@ import { Registry } from "@/components/wedding/Registry";
 import { GuestBook } from "@/components/wedding/GuestBook";
 import { Footer } from "@/components/wedding/Footer";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 
 export default function WeddingPage() {
   const weddingDate = new Date("2025-09-20T16:00:00");
