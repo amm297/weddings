@@ -7,6 +7,7 @@ import "@/lib/firebase";
 import FirebaseInitializer from "@/components/FirebaseInitializer";
 import { Navigation } from "@/components/wedding/Navigation";
 import { WeddingConfigProvider } from "@/providers/WeddingConfigProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Olivia & Liam's Wedding",
@@ -34,10 +35,12 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <WeddingConfigProvider>
-          <Navigation />
-          {children}
-          <Toaster />
-          <FirebaseInitializer />
+          <ThemeProvider>
+            <Navigation />
+            {children}
+            <Toaster />
+            <FirebaseInitializer />
+          </ThemeProvider>
         </WeddingConfigProvider>
       </body>
     </html>

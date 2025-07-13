@@ -35,6 +35,8 @@ export interface ColorScheme {
   accent: string;
   background: string;
   text: string;
+  subtext: string;
+  accentText: string;
 }
 
 export interface DressCode {
@@ -96,12 +98,15 @@ const weddingConfig: WeddingConfig = {
       "Ample parking is available at the venue. For those traveling, we recommend booking accommodation nearby.",
   },
   colorScheme: {
-    primary: "#D4AF37", // Gold
-    secondary: "#8A9A5B", // Sage Green
-    accent: "#FFF8DC", // Cream
+    primary: "#8A9A5B", // Olive Green
+    secondary: "#A3B18A", // Sage Green
+    accent: "#F5F5F5", // Cream
     background: "#FFFFFF", // White
-    text: "#333333", // Dark Gray
+    text: "#333333",
+    subtext: "#666666",
+    accentText: "#333333",
   },
+
   hashtag: "#HappilyEverAfter",
   rsvpDeadline: new Date("2024-11-15"),
   additionalInfo: {
