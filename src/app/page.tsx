@@ -1,14 +1,15 @@
-import { Hero } from '@/components/wedding/Hero';
-import { CountdownTimer } from '@/components/wedding/CountdownTimer';
-import { WeddingInfo } from '@/components/wedding/WeddingInfo';
-import { PhotoGallery } from '@/components/wedding/PhotoGallery';
-import { Registry } from '@/components/wedding/Registry';
-import { GuestBook } from '@/components/wedding/GuestBook';
-import { Footer } from '@/components/wedding/Footer';
-import { Separator } from '@/components/ui/separator';
+import { Hero } from "@/components/wedding/Hero";
+import { CountdownTimer } from "@/components/wedding/CountdownTimer";
+import { WeddingInfo } from "@/components/wedding/WeddingInfo";
+import { PhotoGallery } from "@/components/wedding/PhotoGallery";
+import { Registry } from "@/components/wedding/Registry";
+import { GuestBook } from "@/components/wedding/GuestBook";
+import { Footer } from "@/components/wedding/Footer";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 export default function WeddingPage() {
-  const weddingDate = new Date('2025-09-20T16:00:00');
+  const weddingDate = new Date("2025-09-20T16:00:00");
 
   return (
     <div className="flex flex-col min-h-dvh bg-background font-body">
