@@ -7,15 +7,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useNavigation } from "@/hooks/use-navigation";
+import { useWeddingConfig } from "@/hooks/use-wedding-config";
 
 const navItems = [
-  { label: "Details", href: "#details" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Registry", href: "#registry" },
+  { label: "Detalles", href: "#details" },
+  { label: "Galería", href: "#gallery" },
+  { label: "Registro", href: "#registry" },
   { label: "RSVP", href: "#rsvp" },
 ];
 
 export function Navigation() {
+  const config = useWeddingConfig();
   const { isScrolled, activeSection } = useNavigation(navItems);
   const pathname = usePathname();
 
@@ -34,7 +36,7 @@ export function Navigation() {
             href="#home"
             className="font-headline text-2xl font-bold text-primary"
           >
-            O&L
+            {config.couple.person1.name} & {config.couple.person2.name}
           </Link>
 
           {/* Desktop Navigation */}
@@ -62,14 +64,6 @@ export function Navigation() {
                 </Button>
               );
             })}
-            <Button
-              variant="default"
-              size="sm"
-              className="ml-2 font-headline"
-              asChild
-            >
-              <Link href="#rsvp">RSVP Now</Link>
-            </Button>
           </nav>
 
           {/* Mobile Navigation */}
@@ -106,14 +100,6 @@ export function Navigation() {
                     </Button>
                   );
                 })}
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="mt-4 font-headline w-full"
-                  asChild
-                >
-                  <Link href="#rsvp">RSVP Now</Link>
-                </Button>
               </nav>
             </SheetContent>
           </Sheet>
