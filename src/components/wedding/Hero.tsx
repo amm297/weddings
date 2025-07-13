@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
 import { formatDate } from "@/lib/date-utils";
+import Link from "next/link";
 
 export function Hero() {
   const config = useWeddingConfig();
@@ -31,12 +32,13 @@ export function Hero() {
               <Button
                 variant="default"
                 size="lg"
+                asChild
                 className={cn(
                   "font-headline tracking-wide",
                   "hover:bg-primary/90 transition-all"
                 )}
               >
-                RSVP
+                <Link href="/rsvp">RSVP</Link>
               </Button>
             </div>
           </CardContent>
