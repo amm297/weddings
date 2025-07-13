@@ -40,6 +40,7 @@ export function WeddingInformation() {
       {additionalInfo &&
         Object.keys(additionalInfo).map((key) => (
           <InfoCard
+            key={key}
             icon={getAdditionalInfoIcon(additionalInfo[key].icon ?? "")}
             title={additionalInfo[key].title}
           >
