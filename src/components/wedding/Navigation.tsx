@@ -9,17 +9,22 @@ import { usePathname } from "next/navigation";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
 
-const navItems = [
-  { label: "Detalles", href: "#details" },
-  { label: "Galería", href: "#gallery" },
-  { label: "Registro", href: "#registry" },
-  { label: "RSVP", href: "/rsvp" },
-];
-
 export function Navigation() {
   const config = useWeddingConfig();
-  const { isScrolled, activeSection } = useNavigation(navItems);
   const pathname = usePathname();
+
+  // Extract the slug from the pathname
+  const slug = pathname.split("/")[1];
+
+  // Define navigation items with dynamic paths based on slug
+  const navItems = [
+    { label: "Detalles", href: "#details" },
+    { label: "Galería", href: "#gallery" },
+    { label: "Registro", href: "#registry" },
+    { label: "RSVP", href: `/${slug}/rsvp` },
+  ];
+
+  const { isScrolled, activeSection } = useNavigation(navItems);
 
   return (
     <header
@@ -33,7 +38,7 @@ export function Navigation() {
       <div className="container mx-auto px-4 md:px-6">
         <div id="home" className="flex items-center justify-between">
           <Link
-            href="/"
+            href={`/${slug}`}
             className="font-headline text-2xl font-bold text-primary"
           >
             {config.couple.person1.name} & {config.couple.person2.name}

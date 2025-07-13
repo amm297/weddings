@@ -30,30 +30,24 @@ export interface WeddingDate {
 }
 
 export interface ColorScheme {
-  // Base colors
+  
   primary: string;
   secondary: string;
   accent: string;
   background: string;
 
-  // Text colors
+  
   text: string;
   subtext: string;
   accentText: string;
 
-  // Optional additional colors for more tailwind customization
+  
   muted?: string;
   border?: string;
   input?: string;
   ring?: string;
   destructive?: string;
 }
-
-export interface DressCode {
-  name: string;
-  description: string;
-}
-
 export interface AdditionalInfo {
   title: string;
   description: string;
@@ -65,15 +59,13 @@ export interface WeddingConfig {
   date: WeddingDate;
   location: WeddingLocation;
   colorScheme: ColorScheme;
-  hashtag?: string;
   rsvpDeadline?: Date;
-  dressCode?: DressCode;
   additionalInfo?: {
     [key: string]: AdditionalInfo;
   };
 }
 
-// Default wedding configuration
+
 const weddingConfig: WeddingConfig = {
   couple: {
     person1: {
@@ -108,26 +100,19 @@ const weddingConfig: WeddingConfig = {
       "Ample parking is available at the venue. For those traveling, we recommend booking accommodation nearby.",
   },
   colorScheme: {
-    // Base colors
-    primary: "#8A9A5B", // Olive Green
-    secondary: "#A3B18A", // Sage Green
-    accent: "#F5F5F5", // Cream
-    background: "#FFFFFF", // White
-
-    // Text colors
-    text: "#333333", // Dark gray
-    subtext: "#666666", // Medium gray
-    accentText: "#333333", // Dark gray for accent backgrounds
-
-    // Additional colors
-    muted: "#F0F0F0", // Light gray for muted backgrounds
-    border: "#E0E0E0", // Border color
-    input: "#DDDDDD", // Input border color
-    ring: "#8A9A5B", // Focus ring (same as primary)
-    destructive: "#E57373", // Red for destructive actions
+    primary: "#8A9A5B", 
+    secondary: "#A3B18A", 
+    accent: "#F5F5F5", 
+    background: "#FFFFFF", 
+    text: "#333333", 
+    subtext: "#666666", 
+    accentText: "#333333", 
+    muted: "#F0F0F0", 
+    border: "#E0E0E0", 
+    input: "#DDDDDD", 
+    ring: "#8A9A5B", 
+    destructive: "#E57373", 
   },
-
-  hashtag: "#HappilyEverAfter",
   rsvpDeadline: new Date("2024-11-15"),
   additionalInfo: {
     dressCode: {

@@ -12,7 +12,9 @@
     "lint": "bun run next lint",
     "typecheck": "bun run tsc --noEmit",
     "firebase:emulators": "firebase emulators:start",
-    "dev:firebase": "concurrently \"bun run firebase:emulators\" \"next dev -p 9002\""
+    "firebase:emulators:import": "firebase emulators:start --import=./.firebase-data",
+    "dev:firebase": "concurrently \"bun run firebase:emulators\" \"next dev -p 9002\"",
+    "dev:firebase:persist": "concurrently \"bun run firebase:emulators:import\" \"next dev -p 9002\""
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.13.0",
