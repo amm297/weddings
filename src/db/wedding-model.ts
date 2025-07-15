@@ -53,6 +53,17 @@ export interface AdditionalInfo {
   icon?: string;
 }
 
+export interface FAQSection {
+  title: string;
+  subtitle: string;
+  faqs: FAQ[];
+}
+
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
 export interface WeddingConfig {
   couple: WeddingCouple;
   date: WeddingDate;
@@ -62,6 +73,7 @@ export interface WeddingConfig {
   additionalInfo?: {
     [key: string]: AdditionalInfo;
   };
+  faq?: FAQSection;
 }
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
@@ -106,6 +118,11 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
       },
       rsvpDeadline: data?.rsvpDeadline?.toDate(),
       additionalInfo: data?.additionalInfo || {},
+      faq: data?.faq || {
+        title: "",
+        subtitle: "",
+        faqs: [],
+      },
       createdAt: data?.createdAt,
       updatedAt: data?.updatedAt,
     };
