@@ -30,17 +30,17 @@ export function Navigation() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled
-          ? "bg-background/95 backdrop-blur-sm shadow-sm py-2"
-          : "bg-transparent py-4"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-accent"
+        // isScrolled
+        //   ? "bg-background/95 backdrop-blur-sm shadow-sm py-2"
+        //   : "bg-transparent py-4"
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div id="home" className="flex items-center justify-between">
           <Link
             href={`/${slug}`}
-            className="font-headline text-2xl font-bold text-primary"
+            className="font-sageffine text-2xl text-foreground text-bold"
           >
             {config.couple.person1.name} & {config.couple.person2.name}
           </Link>
@@ -60,7 +60,7 @@ export function Navigation() {
                   size="sm"
                   asChild
                   className={cn(
-                    "font-headline text-base relative border-b-2 border-transparent transition-all",
+                    "text-base relative border-b-2 border-transparent transition-all",
                     isActive &&
                       "text-primary font-medium border-b-2 border-accent",
                     "hover:text-primary hover:font-medium hover:border-accent"
@@ -96,7 +96,7 @@ export function Navigation() {
                       size="lg"
                       asChild
                       className={cn(
-                        "justify-start font-headline text-lg relative border-b-2 border-transparent transition-all",
+                        "justify-start text-lg relative border-b-2 border-transparent transition-all",
                         isActive && "text-primary font-medium",
                         isActive && !isHome && "border-accent",
                         "hover:text-primary hover:font-medium hover:border-accent"

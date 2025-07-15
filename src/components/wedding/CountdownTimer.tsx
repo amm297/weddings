@@ -10,7 +10,6 @@ import { useWeddingConfig } from "@/hooks/use-wedding-config";
 export function CountdownTimer() {
   const config = useWeddingConfig();
   const targetDate = config.date.date;
-  console.log("targetDate", targetDate);
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -104,7 +103,7 @@ export function CountdownTimer() {
   return (
     <section className="py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-3xl md:text-4xl font-headline text-center mb-8 md:mb-12 text-foreground">
+        <h2 className="text-3xl md:text-4xl font-sectionHeadline text-center mb-8 md:mb-12 text-foreground">
           {timeLeft.isWeddingDay
             ? "¡Llegó el día de nuestra boda!"
             : "Cuenta atrás para nuestra boda"}

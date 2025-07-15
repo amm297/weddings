@@ -49,15 +49,17 @@ export default function WeddingPage({ params }: WeddingPageProps) {
       <main className="flex-grow">
         <Hero />
         <CountdownTimer />
-        <WeddingInfo />
-        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
-        <PhotoGallery />
-        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
-        <Registry />
-        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
+        {/* <WeddingInfo /> */}
+        {/* Add new hotels section */}
+        {/* add new timeline section */}
+        {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
+        {/* <PhotoGallery /> New page with a QR only available on wedding date */}
+        {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
+        {/* <Registry />  Update by seciton called bankAccount*/}
+        {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
         <FAQ />
-        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
-        <GuestBook />
+        {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
+        {/* <GuestBook /> */}
       </main>
       <Footer />
     </div>

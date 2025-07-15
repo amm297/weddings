@@ -16,13 +16,13 @@ export function Footer() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0 text-center md:text-left">
-            <p className="font-headline text-2xl text-primary">
+            <p className="font-sageffine text-2xl text-primary">
               {config.couple.person1.name} & {config.couple.person2.name}
             </p>
             <p className="text-sm mt-1 text-foreground/70 flex items-center justify-center md:justify-start gap-1">
               <Calendar className="w-3 h-3" />
               <span>
-                {formatDate(config.date.date, "EEEE, d de MMMM de yyyy")}
+                {formatDate(config.date.date, "EEEE, d 'de' MMMM 'de' yyyy")}
               </span>
             </p>
           </div>
