@@ -21,6 +21,7 @@ export function Navigation() {
     { label: "Detalles", href: "#details" },
     { label: "Galería", href: "#gallery" },
     { label: "Registro", href: "#registry" },
+    { label: "FAQ", href: "#faq" },
     { label: "RSVP", href: `/${slug}/rsvp` },
   ];
 

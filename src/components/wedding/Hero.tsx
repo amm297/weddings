@@ -12,9 +12,11 @@ import { usePathname } from "next/navigation";
 export function Hero() {
   const config = useWeddingConfig();
   const pathname = usePathname();
-  
+
   // Extract the slug from the pathname
-  const slug = pathname.split('/')[1];
+  const slug = pathname.split("/")[1];
+
+  console.log(config);
 
   return (
     <section className="w-full py-20 md:py-32 lg:py-40 bg-accent">
@@ -30,7 +32,7 @@ export function Hero() {
             <div className="mt-8 flex items-center justify-center gap-4 text-foreground/90">
               <Calendar className="w-6 h-6 text-primary" />
               <p className="font-headline text-2xl md:text-3xl">
-                {formatDate(config.date.date, "EEEE, d 'de' MMMM 'de' yyyy")}
+                {formatDate(config.date?.date, "EEEE, d 'de' MMMM 'de' yyyy")}
               </p>
             </div>
             <div className="mt-10 flex flex-wrap gap-4 justify-center">
