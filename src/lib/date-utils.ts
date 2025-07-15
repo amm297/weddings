@@ -29,7 +29,6 @@ export const formatDate = (
   options?: { locale?: Locale }
 ): string => {
   const dateObj = typeof date === "string" ? parseISO(date) : date;
-  console.log("dateObj", dateObj);
   return format(dateObj, formatStr, { locale: DEFAULT_LOCALE, ...options });
 };
 
