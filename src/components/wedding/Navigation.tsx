@@ -25,6 +25,7 @@ export function Navigation() {
     { label: "FAQ", href: "#faq" },
     { label: "Hoteles", href: "#hotels" },
     { label: "Cuenta bancaria", href: "#bank-account" },
+    { label: "Horarios", href: "#timeline" },
     { label: "RSVP", href: `/${slug}/rsvp` },
   ];
 

@@ -1,9 +1,5 @@
 import { Hero } from "@/components/wedding/Hero";
 import { CountdownTimer } from "@/components/wedding/CountdownTimer";
-import { WeddingInfo } from "@/components/wedding/WeddingInfo";
-import { PhotoGallery } from "@/components/wedding/PhotoGallery";
-import { Registry } from "@/components/wedding/Registry";
-import { GuestBook } from "@/components/wedding/GuestBook";
 import { Footer } from "@/components/wedding/Footer";
 import { FAQ } from "@/components/wedding/FAQ";
 import { Separator } from "@/components/ui/separator";
@@ -11,6 +7,7 @@ import { weddingModel } from "@/db";
 import { Metadata } from "next";
 import { Hotel } from "@/components/wedding/Hotel";
 import { BankAccount } from "@/components/wedding/BankAccount";
+import { Timeline } from "@/components/wedding/Timeline";
 
 interface WeddingPageProps {
   params: {
@@ -59,6 +56,7 @@ export default function WeddingPage({ params }: WeddingPageProps) {
         <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
         <BankAccount />
         <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
+        <Timeline />
         {/* add new timeline section */}
         {/* <WeddingInfo /> */}
         {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
