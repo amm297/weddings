@@ -101,7 +101,7 @@ export function CountdownTimer() {
   ];
 
   return (
-    <section className="py-12 md:py-20">
+    <section id="countdown" className="py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl md:text-4xl font-sectionHeadline text-center mb-8 md:mb-12 text-foreground">
           {timeLeft.isWeddingDay

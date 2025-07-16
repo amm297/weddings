@@ -1,6 +1,13 @@
 import { DocumentSnapshot, where } from "firebase/firestore";
 import { BaseModel, BaseDocument } from "./base-model";
 
+export interface Section {
+  title: string;
+  subtitle?: string;
+  description: string;
+  icon?: string;
+}
+
 export interface Person {
   name: string;
   description?: string;
@@ -53,9 +60,7 @@ export interface AdditionalInfo {
   icon?: string;
 }
 
-export interface FAQSection {
-  title: string;
-  subtitle: string;
+export interface FAQSection extends Section {
   faqs: FAQ[];
 }
 
@@ -64,6 +69,21 @@ export interface FAQ {
   answer: string;
 }
 
+export interface HotelSection extends Section {
+  hotels: Hotel[];
+}
+
+export interface Hotel {
+  name: string;
+  promoCode?: string;
+  address?: string;
+  phone?: string;
+  website?: string;
+  imageUrl?: string;
+  description?: string;
+  parking?: string;
+  directions?: string;
+}
 export interface WeddingConfig {
   couple: WeddingCouple;
   date: WeddingDate;
@@ -74,6 +94,7 @@ export interface WeddingConfig {
     [key: string]: AdditionalInfo;
   };
   faq?: FAQSection;
+  hotel?: HotelSection;
 }
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
@@ -122,6 +143,11 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         title: "",
         subtitle: "",
         faqs: [],
+      },
+      hotel: data?.hotel || {
+        title: "",
+        subtitle: "",
+        hotels: [],
       },
       createdAt: data?.createdAt,
       updatedAt: data?.updatedAt,
