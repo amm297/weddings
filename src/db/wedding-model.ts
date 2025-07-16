@@ -84,6 +84,15 @@ export interface Hotel {
   parking?: string;
   directions?: string;
 }
+
+export interface BankAccountSection extends Section {
+  bankAccount: BankAccount;
+}
+export interface BankAccount {
+  buttonText?: string;
+  accountNumber: string;
+}
+
 export interface WeddingConfig {
   couple: WeddingCouple;
   date: WeddingDate;
@@ -95,6 +104,7 @@ export interface WeddingConfig {
   };
   faq?: FAQSection;
   hotel?: HotelSection;
+  bankAccount?: BankAccountSection;
 }
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
@@ -148,6 +158,11 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         title: "",
         subtitle: "",
         hotels: [],
+      },
+      bankAccount: data?.bankAccount || {
+        title: "",
+        subtitle: "",
+        bankAccount: "",
       },
       createdAt: data?.createdAt,
       updatedAt: data?.updatedAt,

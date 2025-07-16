@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { weddingModel } from "@/db";
 import { Metadata } from "next";
 import { Hotel } from "@/components/wedding/Hotel";
+import { BankAccount } from "@/components/wedding/BankAccount";
 
 interface WeddingPageProps {
   params: {
@@ -49,9 +50,15 @@ export default function WeddingPage({ params }: WeddingPageProps) {
     <div id="home" className="flex flex-col min-h-dvh bg-background font-body">
       <main className="flex-grow">
         <Hero />
+        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
         <CountdownTimer />
+        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
         <FAQ />
+        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
         <Hotel />
+        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
+        <BankAccount />
+        <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" />
         {/* add new timeline section */}
         {/* <WeddingInfo /> */}
         {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
