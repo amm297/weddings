@@ -9,6 +9,7 @@ import { FAQ } from "@/components/wedding/FAQ";
 import { Separator } from "@/components/ui/separator";
 import { weddingModel } from "@/db";
 import { Metadata } from "next";
+import { Hotel } from "@/components/wedding/Hotel";
 
 interface WeddingPageProps {
   params: {
@@ -49,15 +50,15 @@ export default function WeddingPage({ params }: WeddingPageProps) {
       <main className="flex-grow">
         <Hero />
         <CountdownTimer />
-        {/* <WeddingInfo /> */}
-        {/* Add new hotels section */}
+        <FAQ />
+        <Hotel />
         {/* add new timeline section */}
+        {/* <WeddingInfo /> */}
         {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
         {/* <PhotoGallery /> New page with a QR only available on wedding date */}
         {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
         {/* <Registry />  Update by seciton called bankAccount*/}
         {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
-        <FAQ />
         {/* <Separator className="my-12 md:my-20 bg-primary/20 max-w-4xl mx-auto" /> */}
         {/* <GuestBook /> */}
       </main>

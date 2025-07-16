@@ -19,9 +19,11 @@ export function Navigation() {
   // Define navigation items with dynamic paths based on slug
   const navItems = [
     { label: "Detalles", href: "#details" },
-    { label: "Galería", href: "#gallery" },
-    { label: "Registro", href: "#registry" },
+    // { label: "Galería", href: "#gallery" },
+    // { label: "Registro", href: "#registry" },
+    { label: "Cuenta atrás", href: "#countdown" },
     { label: "FAQ", href: "#faq" },
+    { label: "Hoteles", href: "#hotels" },
     { label: "RSVP", href: `/${slug}/rsvp` },
   ];
 
