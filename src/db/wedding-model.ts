@@ -93,6 +93,17 @@ export interface BankAccount {
   accountNumber: string;
 }
 
+export interface TimelineSection extends Section {
+  transitionImage: string;
+  timeline: Timeline[];
+}
+export interface Timeline {
+  image: string;
+  imagePosition: "up" | "down";
+  text: string;
+  subtext: string;
+}
+
 export interface WeddingConfig {
   couple: WeddingCouple;
   date: WeddingDate;
@@ -105,6 +116,7 @@ export interface WeddingConfig {
   faq?: FAQSection;
   hotel?: HotelSection;
   bankAccount?: BankAccountSection;
+  timeline?: TimelineSection;
 }
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
@@ -163,6 +175,12 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         title: "",
         subtitle: "",
         bankAccount: "",
+      },
+      timeline: data?.timeline || {
+        title: "",
+        subtitle: "",
+        transitionImage: "",
+        timeline: [],
       },
       createdAt: data?.createdAt,
       updatedAt: data?.updatedAt,
