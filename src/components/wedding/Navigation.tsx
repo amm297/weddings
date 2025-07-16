@@ -24,6 +24,7 @@ export function Navigation() {
     { label: "Cuenta atrás", href: "#countdown" },
     { label: "FAQ", href: "#faq" },
     { label: "Hoteles", href: "#hotels" },
+    { label: "Cuenta bancaria", href: "#bank-account" },
     { label: "RSVP", href: `/${slug}/rsvp` },
   ];
 
