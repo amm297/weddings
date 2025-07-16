@@ -35,10 +35,10 @@ export const TimelineStep = ({
           isMobile && "mt-0"
         )}
       >
-        <p className="text-xs uppercase tracking-wider font-light font-kromosius">
+        <p className="text-base uppercase tracking-wider font-light font-sageffine">
           {text}
         </p>
-        <p className="text-base font-medium font-sageffine">{subtext}</p>
+        <p className="text-xs font-medium font-pinyon">{subtext}</p>
       </div>
 
       {/* Icon/Image - Show if imagePosition is "down" */}

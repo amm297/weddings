@@ -8,36 +8,36 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
+import { fromCamelCaseToWords } from "@/utils/string";
+
+// Define NavItem type
+interface NavItem {
+  label: string;
+  href: string;
+}
 
 export function Navigation() {
-  const config = useWeddingConfig();
+  const { couple, sections } = useWeddingConfig();
   const pathname = usePathname();
 
   // Extract the slug from the pathname
   const slug = pathname.split("/")[1];
 
   // Define navigation items with dynamic paths based on slug
-  const navItems = [
-    { label: "Detalles", href: "#details" },
-    // { label: "Galería", href: "#gallery" },
-    // { label: "Registro", href: "#registry" },
-    { label: "Cuenta atrás", href: "#countdown" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Hoteles", href: "#hotels" },
-    { label: "Cuenta bancaria", href: "#bank-account" },
-    { label: "Horarios", href: "#timeline" },
-    { label: "RSVP", href: `/${slug}/rsvp` },
-  ];
+  const navItems: NavItem[] =
+    sections
+      ?.filter((section) => section !== "hero")
+      ?.map((section) => ({
+        label: fromCamelCaseToWords(section),
+        href: `#${section.toLowerCase()}`,
+      })) || [];
 
-  const { isScrolled, activeSection } = useNavigation(navItems);
+  const { activeSection } = useNavigation(navItems);
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-accent"
-        // isScrolled
-        //   ? "bg-background/95 backdrop-blur-sm shadow-sm py-2"
-        //   : "bg-transparent py-4"
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -46,7 +46,7 @@ export function Navigation() {
             href={`/${slug}`}
             className="font-sageffine text-2xl text-foreground text-bold"
           >
-            {config.couple.person1.name} & {config.couple.person2.name}
+            {couple.person1.name} & {couple.person2.name}
           </Link>
 
           {/* Desktop Navigation */}
