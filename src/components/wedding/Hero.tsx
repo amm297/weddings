@@ -16,8 +16,6 @@ export function Hero() {
   // Extract the slug from the pathname
   const slug = pathname.split("/")[1];
 
-  console.log(config);
-
   return (
     <section className="w-full py-20 md:py-32 lg:py-40 relative">
       <div
@@ -62,7 +60,12 @@ export function Hero() {
                   "hover:bg-primary/90 transition-all"
                 )}
               >
-                <Link href={`/${slug}/rsvp`}>RSVP</Link>
+                <Link
+                  href={config.rsvpForm ? config.rsvpForm : `#rsvp`}
+                  target={config.rsvpForm ? "_blank" : undefined}
+                >
+                  RSVP
+                </Link>
               </Button>
             </div>
           </CardContent>

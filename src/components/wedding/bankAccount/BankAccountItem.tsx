@@ -18,9 +18,11 @@ export const BankAccountItem = ({
     return (
       <div className="flex flex-col gap-4 max-w-md mx-auto">
         {!isVisible ? (
-          <Button onClick={() => setIsVisible(true)}>{buttonText}</Button>
+          <Button className="text-white" onClick={() => setIsVisible(true)}>
+            {buttonText}
+          </Button>
         ) : (
-          <p className="mt-2 text-center font-mono tracking-wider">
+          <p className="mt-2 text-center font-mono tracking-wider text-primary">
             {formatAccountNumber(accountNumber)}
           </p>
         )}

@@ -4,7 +4,7 @@ import { BaseModel, BaseDocument } from "./base-model";
 export interface Section {
   title: string;
   subtitle?: string;
-  description: string;
+  description?: string | string[];
   icon?: string;
 }
 
@@ -104,12 +104,15 @@ export interface Timeline {
   subtext: string;
 }
 
+
+
 export interface WeddingConfig {
   couple: WeddingCouple;
   date: WeddingDate;
   location: WeddingLocation;
   colorScheme: ColorScheme;
   rsvpDeadline?: Date;
+  rsvpForm?: string,
   additionalInfo?: {
     [key: string]: AdditionalInfo;
   };
@@ -117,7 +120,8 @@ export interface WeddingConfig {
   hotel?: HotelSection;
   bankAccount?: BankAccountSection;
   timeline?: TimelineSection;
-}
+  sections?: string[]
+  }
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
   slug: string;
@@ -160,6 +164,7 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         accentText: "#000000",
       },
       rsvpDeadline: data?.rsvpDeadline?.toDate(),
+      rsvpForm: data?.rsvpForm || "",
       additionalInfo: data?.additionalInfo || {},
       faq: data?.faq || {
         title: "",
@@ -174,6 +179,7 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
       bankAccount: data?.bankAccount || {
         title: "",
         subtitle: "",
+        description: "",
         bankAccount: "",
       },
       timeline: data?.timeline || {
@@ -182,6 +188,7 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         transitionImage: "",
         timeline: [],
       },
+      sections: data?.sections || [],
       createdAt: data?.createdAt,
       updatedAt: data?.updatedAt,
     };
