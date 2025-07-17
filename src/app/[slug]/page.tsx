@@ -9,6 +9,13 @@ interface WeddingPageProps {
   };
 }
 
+export async function generateStaticParams() {
+  const weddings = await weddingModel.findAll();
+  return weddings.map((wedding) => ({
+    slug: wedding.slug,
+  }));
+}
+
 // Generate metadata based on wedding information
 export async function generateMetadata({
   params,
