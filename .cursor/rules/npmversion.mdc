@@ -1,0 +1,4 @@
+---
+alwaysApply: true
+---
+before run any cmd action run nvm use stable

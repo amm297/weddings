@@ -104,15 +104,13 @@ export interface Timeline {
   subtext: string;
 }
 
-
-
 export interface WeddingConfig {
   couple: WeddingCouple;
   date: WeddingDate;
   location: WeddingLocation;
   colorScheme: ColorScheme;
   rsvpDeadline?: Date;
-  rsvpForm?: string,
+  rsvpForm?: string;
   additionalInfo?: {
     [key: string]: AdditionalInfo;
   };
@@ -120,8 +118,8 @@ export interface WeddingConfig {
   hotel?: HotelSection;
   bankAccount?: BankAccountSection;
   timeline?: TimelineSection;
-  sections?: string[]
-  }
+  sections?: string[];
+}
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
   slug: string;
@@ -135,6 +133,9 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
 
     const data = snapshot.data();
 
+    // Check if data exists
+    if (!data) return null;
+
     return {
       id: snapshot.id,
       slug: data?.slug || "",
@@ -143,10 +144,10 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         person2: { name: "" },
       },
       date: {
-        date: data.date.date?.toDate(),
-        ceremonyTime: data.date.ceremonyTime || "",
-        receptionTime: data.date.receptionTime || "",
-        timezone: data.date.timezone || "",
+        date: data.date?.date ? data.date.date.toDate() : new Date(),
+        ceremonyTime: data.date?.ceremonyTime || "",
+        receptionTime: data.date?.receptionTime || "",
+        timezone: data.date?.timezone || "",
       },
       location: data?.location || {
         name: "",
@@ -180,7 +181,9 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
         title: "",
         subtitle: "",
         description: "",
-        bankAccount: "",
+        bankAccount: {
+          accountNumber: "",
+        },
       },
       timeline: data?.timeline || {
         title: "",

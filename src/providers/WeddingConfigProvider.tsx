@@ -7,8 +7,8 @@ import { weddingModel } from "../db";
 // Create a default empty wedding config
 const defaultWeddingConfig: WeddingConfig = {
   couple: {
-    person1: { name: "Loading..." },
-    person2: { name: "Loading..." },
+    person1: { name: "" },
+    person2: { name: "" },
   },
   date: {
     date: new Date(),
@@ -30,6 +30,31 @@ const defaultWeddingConfig: WeddingConfig = {
     text: "#000000",
     subtext: "#000000",
     accentText: "#000000",
+  },
+  sections: [],
+  faq: {
+    title: "",
+    subtitle: "",
+    faqs: [],
+  },
+  hotel: {
+    title: "",
+    subtitle: "",
+    hotels: [],
+  },
+  bankAccount: {
+    title: "",
+    subtitle: "",
+    description: "",
+    bankAccount: {
+      accountNumber: "",
+    },
+  },
+  timeline: {
+    title: "",
+    subtitle: "",
+    transitionImage: "",
+    timeline: [],
   },
 };
 
