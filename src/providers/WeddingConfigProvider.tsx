@@ -86,8 +86,8 @@ export const WeddingConfigProvider: React.FC<WeddingConfigProviderProps> = ({
       return;
     }
 
-    // If slug is provided, fetch from Firestore
-    if (slug) {
+    // If slug is provided but no config, fetch from Firestore
+    if (slug && !config) {
       const fetchWedding = async () => {
         try {
           const wedding = await weddingModel.findBySlug(slug);

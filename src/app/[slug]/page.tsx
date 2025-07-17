@@ -1,7 +1,7 @@
 import { Footer } from "@/components/wedding/Footer";
+import { WeddingDisplay } from "@/components/wedding/WeddingDisplay";
 import { weddingModel } from "@/db";
 import { Metadata } from "next";
-import { WeddingDisplay } from "@/components/wedding/WeddingDisplay";
 
 interface WeddingPageProps {
   params: {
@@ -9,6 +9,7 @@ interface WeddingPageProps {
   };
 }
 
+// This function runs at build time to generate the static paths
 export async function generateStaticParams() {
   const weddings = await weddingModel.findAll();
   return weddings.map((wedding) => ({

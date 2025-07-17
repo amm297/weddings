@@ -11,6 +11,12 @@
       "node_modules",
       "firebase-debug.log",
       "firebase-debug.*.log"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   },
   "storage": {
