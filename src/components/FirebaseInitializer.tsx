@@ -14,9 +14,6 @@ export default function FirebaseInitializer() {
     if (process.env.NODE_ENV === "development") {
       connectToEmulators();
     }
-
-    // Log that Firebase is initialized
-    console.log("Firebase initialized");
   }, []);
 
   return null;

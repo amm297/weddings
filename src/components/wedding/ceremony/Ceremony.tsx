@@ -9,7 +9,7 @@ export function Ceremony({ section }: { section: CeremonySection }) {
 
   return (
     <div>
-      <p className="font-sectionHeadline text-lg md:text-xl text-foreground/80 mb-4 tracking-widest">
+      <p className="font-sectionHeadline text-center text-lg md:text-xl text-foreground/80 mb-4 tracking-widest">
         Nos Casamos
       </p>
       <h1 className="font-sageffine text-5xl md:text-7xl">

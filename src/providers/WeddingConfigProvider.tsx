@@ -58,7 +58,6 @@ export const WeddingConfigProvider: React.FC<WeddingConfigProviderProps> = ({
     if (slug && !config) {
       const fetchWedding = async () => {
         try {
-          console.log("fetching wedding provider");
           const wedding = await weddingModel.findBySlug(slug);
           if (wedding) {
             setWeddingConfig(wedding);

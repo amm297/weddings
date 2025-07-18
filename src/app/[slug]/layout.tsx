@@ -18,7 +18,6 @@ export default async function WeddingLayout({
   params,
 }: WeddingLayoutProps) {
   const { slug } = await params;
-  console.log("wedding layout", slug);
 
   return (
     <>

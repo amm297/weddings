@@ -74,11 +74,11 @@ export abstract class BaseModel<T extends BaseDocument> {
       } as T;
 
       console.log("Creating document in collection:", this.collectionName);
-      console.log("Document data:", JSON.stringify(docData, null, 2));
+      
 
       // Convert the document data to a plain object that Firestore can store
       const firestoreData = this.toFirestore(docData);
-      console.log("Firestore data:", JSON.stringify(firestoreData, null, 2));
+      
 
       // Set the document in Firestore
       await setDoc(docRef, firestoreData);

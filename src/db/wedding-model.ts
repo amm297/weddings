@@ -145,10 +145,6 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
     // Check if data exists
     if (!data) return null;
 
-    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-    console.log("data at form firestore");
-    console.log(data);
-
     return {
       id: snapshot.id,
       slug: data?.slug || "",
@@ -163,7 +159,6 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
    */
   async findBySlug(slug: string): Promise<WeddingDocument | null> {
     try {
-      console.log("Finding wedding by slug:", slug);
       const results = await this.find([where("slug", "==", slug)]);
       return results.length > 0
         ? this.serializeWeddingDates(results[0])!

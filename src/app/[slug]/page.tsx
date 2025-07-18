@@ -24,7 +24,6 @@ export async function generateMetadata({
   const { slug } = await params;
 
   try {
-    console.log("generating metadata");
     const wedding = await weddingModel.findBySlug(slug);
 
     if (!wedding) {

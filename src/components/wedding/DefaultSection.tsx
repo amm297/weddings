@@ -27,7 +27,14 @@ export function DefaultSection({
   };
 
   return (
-    <WeddingLayout id={id} title={title} subtitle={subtitle} isEven={isEven}>
+    <WeddingLayout
+      id={id}
+      title={title}
+      subtitle={subtitle}
+      isEven={isEven}
+      backgroundImage={section.backgroundImage}
+      overlay={section.overlay}
+    >
       <Card className="max-w-3xl mx-auto bg-background/50 backdrop-blur-sm border-primary/20 bg-accent">
         <CardContent className="pt-6 pb-8 px-6 md:px-10">
           {renderSection()}
