@@ -1,25 +1,16 @@
 import { DocumentSnapshot, where } from "firebase/firestore";
 import { BaseModel, BaseDocument } from "./base-model";
 
-export interface Section {
-  title: string;
-  subtitle?: string;
-  description?: string | string[];
-  icon?: string;
-}
-
 export interface Person {
   name: string;
-  description?: string;
-  image?: string;
 }
 
-export interface WeddingCouple {
+export interface Couple {
   person1: Person;
   person2: Person;
 }
 
-export interface WeddingLocation {
+export interface Location {
   name: string;
   address: string;
   city: string;
@@ -27,16 +18,7 @@ export interface WeddingLocation {
   country: string;
   zipCode?: string;
   googleMapsUrl?: string;
-  imageUrl?: string;
   description?: string;
-  parking?: string;
-}
-
-export interface WeddingDate {
-  date: Date;
-  ceremonyTime: string;
-  receptionTime: string;
-  timezone: string;
 }
 
 export interface ColorScheme {
@@ -54,10 +36,28 @@ export interface ColorScheme {
   destructive?: string;
 }
 
-export interface AdditionalInfo {
-  title: string;
-  description: string;
+export interface Section {
+  id: string;
+  layout?: "default" | "timeline" | "faq" | "hotel" | "bankaccount" | "rsvp";
+  title?: string;
+  subtitle?: string;
+  description?: string | string[];
   icon?: string;
+  backgroundImage?: string;
+  overlay?: boolean
+  cta?: SectionCTA
+}
+
+export interface SectionCTA {
+  text: string;
+  link: string;
+}
+
+export interface Ceremony extends Section {
+  couple: Couple,
+  location: Location,
+  date: Date,
+  timezone: string
 }
 
 export interface FAQSection extends Section {
@@ -104,21 +104,14 @@ export interface Timeline {
   subtext: string;
 }
 
+export interface RsvpSection extends Section {
+  deadline: Date
+  form?: string
+}
+
 export interface WeddingConfig {
-  couple: WeddingCouple;
-  date: WeddingDate;
-  location: WeddingLocation;
   colorScheme: ColorScheme;
-  rsvpDeadline?: Date;
-  rsvpForm?: string;
-  additionalInfo?: {
-    [key: string]: AdditionalInfo;
-  };
-  faq?: FAQSection;
-  hotel?: HotelSection;
-  bankAccount?: BankAccountSection;
-  timeline?: TimelineSection;
-  sections?: string[];
+  sections?: Section[];
 }
 
 export interface WeddingDocument extends BaseDocument, WeddingConfig {
@@ -139,62 +132,9 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
     return {
       id: snapshot.id,
       slug: data?.slug || "",
-      couple: data?.couple || {
-        person1: { name: "" },
-        person2: { name: "" },
-      },
-      date: {
-        date: data.date?.date ? data.date.date.toDate() : new Date(),
-        ceremonyTime: data.date?.ceremonyTime || "",
-        receptionTime: data.date?.receptionTime || "",
-        timezone: data.date?.timezone || "",
-      },
-      location: data?.location || {
-        name: "",
-        address: "",
-        city: "",
-        country: "",
-      },
-      colorScheme: data?.colorScheme || {
-        primary: "#000000",
-        secondary: "#000000",
-        accent: "#000000",
-        background: "#FFFFFF",
-        text: "#000000",
-        subtext: "#000000",
-        accentText: "#000000",
-      },
-      rsvpDeadline: data?.rsvpDeadline?.toDate(),
-      rsvpForm: data?.rsvpForm || "",
-      additionalInfo: data?.additionalInfo || {},
-      faq: data?.faq || {
-        title: "",
-        subtitle: "",
-        faqs: [],
-      },
-      hotel: data?.hotel || {
-        title: "",
-        subtitle: "",
-        hotels: [],
-      },
-      bankAccount: data?.bankAccount || {
-        title: "",
-        subtitle: "",
-        description: "",
-        bankAccount: {
-          accountNumber: "",
-        },
-      },
-      timeline: data?.timeline || {
-        title: "",
-        subtitle: "",
-        transitionImage: "",
-        timeline: [],
-      },
+      colorScheme: data?.colorScheme || {},
       sections: data?.sections || [],
-      createdAt: data?.createdAt,
-      updatedAt: data?.updatedAt,
-    };
+    }
   }
 
   /**

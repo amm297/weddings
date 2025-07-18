@@ -12,7 +12,10 @@
     "lint": "bun run next lint",
     "typecheck": "bun run tsc --noEmit",
     "firebase:emulators": "firebase emulators:start --import=./.firebase-data --export-on-exit",
-    "deploy": "bun run build && firebase deploy --only hosting"
+    "deploy": "bun run build && firebase deploy --only hosting",
+    "import:wedding-data": "bun run scripts/import-wedding-data.ts",
+    "import:wedding-data:dry-run": "bun run scripts/import-wedding-data.ts --dry-run",
+    "import:wedding-data:emulator": "bun run scripts/import-wedding-data.ts --use-emulator"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.13.0",
