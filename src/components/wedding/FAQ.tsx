@@ -1,6 +1,6 @@
 "use client";
 
-import { useWeddingConfig } from "@/hooks/use-wedding-config";
+import { useWeddingSection } from "@/hooks/use-wedding-section";
 import {
   Accordion,
   AccordionContent,
@@ -8,10 +8,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { WeddingLayout } from "./WeddingLayout";
+import { FAQSection } from "@/db/wedding-model";
 
 export function FAQ({ isEven }: { isEven: boolean }) {
-  const { faq } = useWeddingConfig();
-  const { title, subtitle, faqs } = faq || {};
+  const section = useWeddingSection("faq") as FAQSection;
+  const { title, subtitle, faqs } = section;
 
   if (!title) return null;
 

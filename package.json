@@ -5,21 +5,18 @@
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "bun:dev": "bunx --bun next dev -p 9002",
-    "genkit:dev": "bunx --bun genkit start -- bun run src/ai/dev.ts",
-    "genkit:watch": "bunx --bun genkit start -- bun --watch src/ai/dev.ts",
     "build": "bun run next build",
     "start": "bun run next start",
     "lint": "bun run next lint",
     "typecheck": "bun run tsc --noEmit",
     "firebase:emulators": "firebase emulators:start --import=./.firebase-data --export-on-exit",
+    "dev:firebase": "concurrently \"bun run firebase:emulators\" \"bun run dev\"",
     "deploy": "bun run build && firebase deploy --only hosting",
     "import:wedding-data": "bun run scripts/import-wedding-data.ts",
-    "import:wedding-data:dry-run": "bun run scripts/import-wedding-data.ts --dry-run",
+    "import:wedding-data:prod": "bun run scripts/import-wedding-data.ts --prod",
     "import:wedding-data:emulator": "bun run scripts/import-wedding-data.ts --use-emulator"
   },
   "dependencies": {
-    "@genkit-ai/googleai": "^1.13.0",
-    "@genkit-ai/next": "^1.13.0",
     "@hookform/resolvers": "5.1.1",
     "@radix-ui/react-accordion": "1.2.11",
     "@radix-ui/react-alert-dialog": "1.1.14",

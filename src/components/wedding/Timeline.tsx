@@ -1,14 +1,15 @@
 "use client";
 
-import { useWeddingConfig } from "@/hooks/use-wedding-config";
+import { useWeddingSection } from "@/hooks/use-wedding-section";
 import TimelineDesktop from "./timeline/TimelineDesktop";
 import TimelineMobile from "./timeline/TimelineMobile";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { WeddingLayout } from "./WeddingLayout";
+import { TimelineSection } from "@/db/wedding-model";
 
 export function Timeline({ isEven }: { isEven: boolean }) {
-  const config = useWeddingConfig();
-  const { title, subtitle, timeline } = config.timeline || {};
+  const section = useWeddingSection("timeline") as TimelineSection;
+  const { title, subtitle, timeline } = section;
   const isMobile = useIsMobile();
 
   if (!title || !timeline?.length) return null;

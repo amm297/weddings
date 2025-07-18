@@ -10,6 +10,11 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 
 export default function FirebaseInitializer() {
   useEffect(() => {
+    // Connect to emulators on component mount in development
+    if (process.env.NODE_ENV === "development") {
+      connectToEmulators();
+    }
+
     // Log that Firebase is initialized
     console.log("Firebase initialized");
   }, []);

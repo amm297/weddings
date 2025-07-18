@@ -12,12 +12,12 @@ import dotenv from "dotenv";
 
 // Parse command line arguments
 const args = process.argv.slice(2);
-const isDryRun = args.includes("--dry-run");
+const prod = args.includes("--prod");
 const useEmulator = args.includes("--use-emulator");
 
 // Load environment variables
-if (isDryRun) {
-  console.log("Using production environment variables for dry run");
+if (prod) {
+  console.log("Run for production");
   dotenv.config({ path: ".env.production" });
 } else {
   dotenv.config();
@@ -97,15 +97,9 @@ async function importWeddingData() {
       throw new Error("Wedding data must have an id or slug field");
     }
 
-    if (isDryRun) {
-      console.log("DRY RUN: Would import the following data to Firestore:");
-      console.log(`Document ID: ${docId}`);
-      console.log("Data:", JSON.stringify(dataWithTimestamps, null, 2));
-    } else {
-      // Import the data to Firestore
-      await setDoc(doc(db, "weddings", docId), dataWithTimestamps);
-      console.log(`Successfully imported wedding data with ID: ${docId}`);
-    }
+    // Import the data to Firestore
+    await setDoc(doc(db, "weddings", docId), dataWithTimestamps);
+    console.log(`Successfully imported wedding data with ID: ${docId}`);
 
     process.exit(0);
   } catch (error) {

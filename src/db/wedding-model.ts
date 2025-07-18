@@ -1,5 +1,6 @@
 import { DocumentSnapshot, where } from "firebase/firestore";
 import { BaseModel, BaseDocument } from "./base-model";
+import { serializeDate } from "@/lib/date-utils";
 
 export interface Person {
   name: string;
@@ -38,14 +39,22 @@ export interface ColorScheme {
 
 export interface Section {
   id: string;
-  layout?: "default" | "timeline" | "faq" | "hotel" | "bankaccount" | "rsvp";
+  name?: string;
+  layout?:
+    | "main"
+    | "default"
+    | "timeline"
+    | "faq"
+    | "hotel"
+    | "bankaccount"
+    | "rsvp";
   title?: string;
   subtitle?: string;
   description?: string | string[];
   icon?: string;
   backgroundImage?: string;
-  overlay?: boolean
-  cta?: SectionCTA
+  overlay?: boolean;
+  cta?: SectionCTA;
 }
 
 export interface SectionCTA {
@@ -53,11 +62,11 @@ export interface SectionCTA {
   link: string;
 }
 
-export interface Ceremony extends Section {
-  couple: Couple,
-  location: Location,
-  date: Date,
-  timezone: string
+export interface CeremonySection extends Section {
+  couple: Couple;
+  location: Location;
+  date: Date;
+  timezone: string;
 }
 
 export interface FAQSection extends Section {
@@ -105,12 +114,19 @@ export interface Timeline {
 }
 
 export interface RsvpSection extends Section {
-  deadline: Date
-  form?: string
+  deadline: Date;
+  form?: string;
+}
+
+export interface Summary {
+  couple: Couple;
+  date: Date;
+  location: string;
 }
 
 export interface WeddingConfig {
   colorScheme: ColorScheme;
+  summary: Summary;
   sections?: Section[];
 }
 
@@ -129,12 +145,17 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
     // Check if data exists
     if (!data) return null;
 
+    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+    console.log("data at form firestore");
+    console.log(data);
+
     return {
       id: snapshot.id,
       slug: data?.slug || "",
+      summary: data?.summary || {},
       colorScheme: data?.colorScheme || {},
       sections: data?.sections || [],
-    }
+    };
   }
 
   /**
@@ -144,10 +165,53 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
     try {
       console.log("Finding wedding by slug:", slug);
       const results = await this.find([where("slug", "==", slug)]);
-      return results.length > 0 ? results[0] : null;
+      return results.length > 0
+        ? this.serializeWeddingDates(results[0])!
+        : null;
     } catch (error) {
       console.error("Error finding wedding by slug:", error);
       return null;
     }
+  }
+
+  /**
+   * Serialize all date objects in the wedding data to avoid
+   * "Only plain objects can be passed to Client Components" error
+   */
+  serializeWeddingDates(
+    wedding: WeddingDocument | null
+  ): WeddingDocument | undefined {
+    if (!wedding) return undefined;
+
+    const serialized = { ...wedding } as any;
+
+    // Serialize summary date
+    if (serialized.summary?.date) {
+      serialized.summary = {
+        ...serialized.summary,
+        date: serializeDate(serialized.summary.date),
+      };
+    }
+
+    // Serialize dates in sections
+    if (serialized.sections && Array.isArray(serialized.sections)) {
+      serialized.sections = serialized.sections.map((section: any) => {
+        const newSection = { ...section };
+
+        // Handle ceremony date
+        if (newSection.date) {
+          newSection.date = serializeDate(newSection.date);
+        }
+
+        // Handle RSVP deadline
+        if (newSection.deadline) {
+          newSection.deadline = serializeDate(newSection.deadline);
+        }
+
+        return newSection;
+      });
+    }
+
+    return serialized;
   }
 }

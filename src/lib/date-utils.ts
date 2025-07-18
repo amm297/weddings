@@ -21,6 +21,37 @@ export const DEFAULT_LOCALE = es;
 export const DEFAULT_TIMEZONE = "Europe/Madrid";
 
 /**
+ * Convert Firebase Timestamp or Date object to serializable format
+ * This helps avoid "Only plain objects can be passed to Client Components from Server Components" errors
+ */
+export const serializeDate = (date: any): string => {
+  if (!date) return "";
+
+  // Handle Firebase Timestamp
+  if (
+    date &&
+    typeof date === "object" &&
+    "seconds" in date &&
+    "nanoseconds" in date
+  ) {
+    return new Date(date.seconds * 1000).toISOString();
+  }
+
+  // Handle regular Date objects
+  if (date instanceof Date) {
+    return date.toISOString();
+  }
+
+  // If it's already a string, return as is
+  if (typeof date === "string") {
+    return date;
+  }
+
+  // Fallback
+  return "";
+};
+
+/**
  * Format a date with the specified format string
  */
 export const formatDate = (

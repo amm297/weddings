@@ -1,13 +1,14 @@
 "use client";
 
-import { useWeddingConfig } from "@/hooks/use-wedding-config";
 import { BankAccountItem } from "./bankAccount/BankAccountItem";
 import { WeddingLayout } from "./WeddingLayout";
+import { useWeddingSection } from "@/hooks/use-wedding-section";
+import { BankAccountSection } from "@/db/wedding-model";
 
 export function BankAccount({ isEven }: { isEven: boolean }) {
-  const config = useWeddingConfig();
+  const section = useWeddingSection("bankaccount") as BankAccountSection;
 
-  const { title, description, bankAccount } = config.bankAccount || {};
+  const { title, description, bankAccount } = section;
 
   if (!title || !bankAccount) return null;
 

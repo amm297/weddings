@@ -6,56 +6,24 @@ import { weddingModel } from "../db";
 
 // Create a default empty wedding config
 const defaultWeddingConfig: WeddingConfig = {
-  couple: {
-    person1: { name: "" },
-    person2: { name: "" },
-  },
-  date: {
-    date: new Date(),
-    ceremonyTime: "",
-    receptionTime: "",
-    timezone: "",
-  },
-  location: {
-    name: "",
-    address: "",
-    city: "",
-    country: "",
-  },
   colorScheme: {
-    primary: "#000000",
-    secondary: "#000000",
-    accent: "#000000",
-    background: "#FFFFFF",
-    text: "#000000",
-    subtext: "#000000",
-    accentText: "#000000",
+    primary: "",
+    secondary: "",
+    accent: "",
+    background: "",
+    text: "",
+    subtext: "",
+    accentText: "",
+  },
+  summary: {
+    couple: {
+      person1: { name: "" },
+      person2: { name: "" },
+    },
+    date: new Date(),
+    location: "",
   },
   sections: [],
-  faq: {
-    title: "",
-    subtitle: "",
-    faqs: [],
-  },
-  hotel: {
-    title: "",
-    subtitle: "",
-    hotels: [],
-  },
-  bankAccount: {
-    title: "",
-    subtitle: "",
-    description: "",
-    bankAccount: {
-      accountNumber: "",
-    },
-  },
-  timeline: {
-    title: "",
-    subtitle: "",
-    transitionImage: "",
-    timeline: [],
-  },
 };
 
 // Create context with default value
@@ -90,6 +58,7 @@ export const WeddingConfigProvider: React.FC<WeddingConfigProviderProps> = ({
     if (slug && !config) {
       const fetchWedding = async () => {
         try {
+          console.log("fetching wedding provider");
           const wedding = await weddingModel.findBySlug(slug);
           if (wedding) {
             setWeddingConfig(wedding);

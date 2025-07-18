@@ -39,3 +39,8 @@ export function connectToEmulators() {
     console.error("Error connecting to Firebase emulators:", error);
   }
 }
+
+// Connect to emulators immediately on server side in development
+if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
+  connectToEmulators();
+}

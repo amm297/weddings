@@ -31,43 +31,7 @@ export function Hero() {
       <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
         <Card className="max-w-3xl mx-auto bg-background/50 backdrop-blur-sm border-primary/20 bg-accent">
           <CardContent className="pt-6 pb-8 px-6 md:px-10">
-            <p className="font-sectionHeadline text-lg md:text-xl text-foreground/80 mb-4 tracking-widest">
-              Nos Casamos
-            </p>
-            <h1 className="font-sageffine text-5xl md:text-7xl">
-              <div className="flex justify-center items-center">
-                <span className="flex-1 text-right pr-4">
-                  {config.couple.person1.name}
-                </span>
-                <span className="mx-2">&amp;</span>
-                <span className="flex-1 text-left pl-4">
-                  {config.couple.person2.name}
-                </span>
-              </div>
-            </h1>
-            <div className="mt-8 flex items-center justify-center gap-4 text-foreground/90">
-              <p className="font-pinyon text-2xl md:text-4xl">
-                {formatDate(config.date?.date, "dd.MM.yyyy")}
-              </p>
-            </div>
-            <div className="mt-10 flex flex-wrap gap-4 justify-center">
-              <Button
-                variant="default"
-                size="lg"
-                asChild
-                className={cn(
-                  "font-headline tracking-wide",
-                  "hover:bg-primary/90 transition-all"
-                )}
-              >
-                <Link
-                  href={config.rsvpForm ? config.rsvpForm : `#rsvp`}
-                  target={config.rsvpForm ? "_blank" : undefined}
-                >
-                  RSVP
-                </Link>
-              </Button>
-            </div>
+           
           </CardContent>
         </Card>
       </div>

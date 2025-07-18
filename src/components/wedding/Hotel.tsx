@@ -1,6 +1,6 @@
 "use client";
 
-import { useWeddingConfig } from "@/hooks/use-wedding-config";
+import { useWeddingSection } from "@/hooks/use-wedding-section";
 import { HotelCard } from "./hotel/HotelCard";
 import {
   Carousel,
@@ -10,10 +10,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { WeddingLayout } from "./WeddingLayout";
+import { HotelSection } from "@/db/wedding-model";
 
 export function Hotel({ isEven }: { isEven: boolean }) {
-  const { hotel } = useWeddingConfig();
-  const { title, subtitle, hotels } = hotel || {};
+  const section = useWeddingSection("hotel") as HotelSection;
+  const { title, subtitle, hotels } = section;
 
   if (!title || !hotels?.length) return null;
 

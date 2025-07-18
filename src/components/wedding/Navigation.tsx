@@ -8,31 +8,31 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
-import { fromCamelCaseToWords } from "@/utils/string";
+import {
+  NavItem,
+  useNavigationSections,
+} from "@/hooks/use-navigation-sections";
 
 // Define NavItem type
-interface NavItem {
-  label: string;
-  href: string;
-}
 
 export function Navigation() {
-  const { couple, sections } = useWeddingConfig();
+  const { summary } = useWeddingConfig();
+  const sections = useNavigationSections();
   const pathname = usePathname();
 
   // Extract the slug from the pathname
   const slug = pathname.split("/")[1];
 
   // Define navigation items with dynamic paths based on slug
-  const navItems: NavItem[] =
-    sections
-      ?.filter((section) => section !== "hero")
-      ?.map((section) => ({
-        label: fromCamelCaseToWords(section),
-        href: `#${section.toLowerCase()}`,
-      })) || [];
+  const navItems: NavItem[] = sections || [];
 
   const { activeSection } = useNavigation(navItems);
+
+  // Get couple names safely
+  const person1Name = summary?.couple?.person1?.name || "";
+  const person2Name = summary?.couple?.person2?.name || "";
+  const coupleTitle =
+    person1Name && person2Name ? `${person1Name} & ${person2Name}` : "";
 
   return (
     <header
@@ -46,7 +46,7 @@ export function Navigation() {
             href={`/${slug}`}
             className="font-sageffine text-2xl text-foreground text-bold"
           >
-            {couple.person1.name} & {couple.person2.name}
+            {coupleTitle}
           </Link>
 
           {/* Desktop Navigation */}

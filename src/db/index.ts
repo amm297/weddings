@@ -5,6 +5,9 @@ export * from "./base-model";
 export * from "./rsvp-model";
 export * from "./wedding-model";
 
+// Import emulators connection to ensure it's initialized on server side
+import "../lib/firebase-emulators";
+
 // Create instances for direct use
 import { RSVPModel } from "./rsvp-model";
 import { WeddingModel } from "./wedding-model";

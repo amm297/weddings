@@ -15,8 +15,6 @@ export function WeddingLayout({
   title,
   subtitle,
 }: WeddingLayoutProps) {
-  if (!title) return null;
-
   return (
     <section
       id={id}

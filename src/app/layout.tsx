@@ -4,7 +4,6 @@ import { Toaster } from "@/components/ui/toaster";
 
 // Import Firebase - this ensures it's initialized
 import "@/lib/firebase";
-import FirebaseInitializer from "@/components/FirebaseInitializer";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
@@ -32,9 +31,10 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <FirebaseInitializer />
-        {children}
-        <Toaster />
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
