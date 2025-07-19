@@ -4,25 +4,44 @@ import { BankAccountItem } from "./bankAccount/BankAccountItem";
 import { WeddingLayout } from "./WeddingLayout";
 import { useWeddingSection } from "@/hooks/use-wedding-section";
 import { BankAccountSection } from "@/db/wedding-model";
+import { cn } from "@/lib/utils";
 
 export function BankAccount({ isEven }: { isEven: boolean }) {
   const section = useWeddingSection("bankaccount") as BankAccountSection;
 
-  const { title, description, bankAccount } = section;
+  const { title, description, bankAccount, style } = section;
+  const hasBackgroundImage = Boolean(style?.image);
 
   if (!title || !bankAccount) return null;
 
   return (
-    <WeddingLayout id="bankaccount" title={title} isEven={isEven}>
+    <WeddingLayout
+      id="bankaccount"
+      title={title}
+      isEven={isEven}
+      sectionStyle={style}
+    >
       <div className="max-w-2xl mx-auto">
         {Array.isArray(description) ? (
-          <div className="flex flex-col text-center text-foreground/80 mb-12 gap-2">
+          <div
+            className={cn(
+              "flex flex-col text-center mb-12 gap-2",
+              hasBackgroundImage ? "text-white/90" : "text-foreground/80"
+            )}
+          >
             {description.map((item, index) => (
               <p key={`ba-desc-${index}`}>{item}</p>
             ))}
           </div>
         ) : (
-          <p className="text-center text-foreground/80 mb-12">{description}</p>
+          <p
+            className={cn(
+              "text-center mb-12",
+              hasBackgroundImage ? "text-white/90" : "text-foreground/80"
+            )}
+          >
+            {description}
+          </p>
         )}
       </div>
       <BankAccountItem bankAccount={bankAccount} />

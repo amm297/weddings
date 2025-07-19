@@ -35,6 +35,7 @@ export interface ColorScheme {
   input?: string;
   ring?: string;
   destructive?: string;
+  overlay?: string;
 }
 
 export interface Section {

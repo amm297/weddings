@@ -33,6 +33,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     const accentTextHsl = hexToHsl(colorScheme.accentText);
 
     // Additional colors (with fallbacks)
+    const overlayHsl = colorScheme.overlay
+      ? hexToHsl(colorScheme.overlay)
+      : "0 0 0";
     const mutedHsl = colorScheme.muted
       ? hexToHsl(colorScheme.muted)
       : accentHsl;
@@ -53,6 +56,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     document.documentElement.style.setProperty("--secondary", secondaryHsl);
     document.documentElement.style.setProperty("--accent", accentHsl);
     document.documentElement.style.setProperty("--background", backgroundHsl);
+    document.documentElement.style.setProperty("--overlay", overlayHsl);
 
     // Text colors
     document.documentElement.style.setProperty("--foreground", textHsl);

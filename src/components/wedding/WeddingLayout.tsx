@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils";
 import { SectionStyle } from "@/db";
 
-
-
 export interface WeddingLayoutProps {
   isEven: boolean;
   id: string;
@@ -20,6 +18,8 @@ export function WeddingLayout({
   subtitle,
   sectionStyle,
 }: WeddingLayoutProps) {
+  const hasBackgroundImage = Boolean(sectionStyle?.image);
+
   return (
     <section
       id={id}
@@ -28,29 +28,50 @@ export function WeddingLayout({
         isEven ? "bg-background" : "bg-primary/10"
       )}
     >
-      {sectionStyle?.image && sectionStyle.imagePosition === "background" && (
+      {sectionStyle?.image && (
         <div
           className="absolute inset-0 z-0"
           style={{
             backgroundImage: `url(${sectionStyle.image})`,
-            backgroundSize: "800px",
-            backgroundRepeat: "repeat",
+            backgroundSize: "100%",
+            backgroundPosition: "center",
           }}
         >
           {sectionStyle.overlay && (
-            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-overlay/[74%]" />
           )}
         </div>
       )}
-      <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-3xl md:text-5xl font-sectionHeadline text-center text-foreground uppercase tracking-wider mb-2">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <h2
+          className={cn(
+            "text-3xl md:text-5xl font-sectionHeadline text-center uppercase tracking-wider mb-2",
+            hasBackgroundImage ? "text-white drop-shadow-md" : "text-foreground"
+          )}
+        >
           {title}
         </h2>
         {subtitle && (
-          <p className="text-center text-foreground/40 ">{subtitle}</p>
-        )}
+          <p
+            className={cn(
+              "text-center",
+              hasBackgroundImage
+                ? "text-white/90 drop-shadow-md"
+                : "text-foreground/40"
+            )}
+          >
+            {subtitle}
+          </p>
+        )} 
 
-        <div className="max-w-6xl mx-auto mt-8">{children}</div>
+        <div
+          className={cn(
+            "max-w-6xl mx-auto mt-8",
+            hasBackgroundImage && "text-white"
+          )}
+        >
+          {children}
+        </div>
       </div>
     </section>
   );

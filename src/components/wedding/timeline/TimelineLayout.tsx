@@ -14,6 +14,7 @@ export default function TimelineLayout({
     <div className="flex w-full flex-grow p-5 flex-col md:flex-row">
       {timeline.map((step, index) => (
         <div
+          key={`timeline-${step.text}`}
           className={cn(
             "flex flex-grow justify-center items-center flex-col md:flex-row"
           )}
@@ -22,6 +23,7 @@ export default function TimelineLayout({
           {transitionImage && index < timeline.length - 1 && (
             <img
               src={transitionImage}
+              key={`transition-${step.text?.toLowerCase()}`}
               alt={`transition-${step.text?.toLowerCase()}`}
               className={cn(
                 "w-20 h-20 z-20 scale-110",
