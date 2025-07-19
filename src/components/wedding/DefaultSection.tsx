@@ -32,11 +32,20 @@ export function DefaultSection({
       title={title}
       subtitle={subtitle}
       isEven={isEven}
-      backgroundImage={section.backgroundImage}
-      overlay={section.overlay}
+      sectionStyle={section.style}
     >
       <Card className="max-w-3xl mx-auto bg-background/50 backdrop-blur-sm border-primary/20 bg-accent">
-        <CardContent className="pt-6 pb-8 px-6 md:px-10">
+        <CardContent
+          className="pt-6 pb-8 px-6 md:px-10 rounded"
+          style={{
+            ...(section?.style?.texture && {
+              backgroundImage: `url(${section.style?.texture})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "repeat",
+            }),
+          }}
+        >
           {renderSection()}
         </CardContent>
       </Card>

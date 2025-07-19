@@ -51,10 +51,16 @@ export interface Section {
   title?: string;
   subtitle?: string;
   description?: string | string[];
-  icon?: string;  
-  backgroundImage?: string;
-  overlay?: boolean;
+  icon?: string;
   cta?: SectionCTA;
+  style?: SectionStyle;
+}
+
+export interface SectionStyle {
+  texture?: string;
+  image?: string;
+  overlay?: boolean;
+  imagePosition?: "left" | "right" | "background";
 }
 
 export interface SectionCTA {

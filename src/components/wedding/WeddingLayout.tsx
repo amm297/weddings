@@ -1,4 +1,7 @@
 import { cn } from "@/lib/utils";
+import { SectionStyle } from "@/db";
+
+
 
 export interface WeddingLayoutProps {
   isEven: boolean;
@@ -6,8 +9,7 @@ export interface WeddingLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
-  backgroundImage?: string;
-  overlay?: boolean;
+  sectionStyle?: SectionStyle;
 }
 
 export function WeddingLayout({
@@ -16,8 +18,7 @@ export function WeddingLayout({
   children,
   title,
   subtitle,
-  backgroundImage,
-  overlay,
+  sectionStyle,
 }: WeddingLayoutProps) {
   return (
     <section
@@ -27,16 +28,18 @@ export function WeddingLayout({
         isEven ? "bg-background" : "bg-primary/10"
       )}
     >
-      {backgroundImage && (
+      {sectionStyle?.image && sectionStyle.imagePosition === "background" && (
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `url(${backgroundImage})`,
+            backgroundImage: `url(${sectionStyle.image})`,
             backgroundSize: "800px",
             backgroundRepeat: "repeat",
           }}
         >
-          {overlay && <div className="absolute inset-0 bg-black/30" />}
+          {sectionStyle.overlay && (
+            <div className="absolute inset-0 bg-black/30" />
+          )}
         </div>
       )}
       <div className="container mx-auto px-4 md:px-6">

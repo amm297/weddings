@@ -14,7 +14,8 @@
     "deploy": "bun run build && firebase deploy --only hosting",
     "import:wedding-data": "bun run scripts/import-wedding-data.ts",
     "import:wedding-data:prod": "bun run scripts/import-wedding-data.ts --prod",
-    "import:wedding-data:emulator": "bun run scripts/import-wedding-data.ts --use-emulator"
+    "import:wedding-data:emulator": "bun run scripts/import-wedding-data.ts --use-emulator",
+    "process:images": "bun run scripts/process-images.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",
@@ -54,6 +55,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "7.60.0",
     "recharts": "^2.15.1",
+    "sharp": "0.34.3",
     "tailwind-merge": "3.3.1",
     "tailwindcss-animate": "1.0.7",
     "zod": "4.0.5"

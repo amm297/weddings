@@ -9,7 +9,7 @@ import { TimelineSection } from "@/db/wedding-model";
 
 export function Timeline({ isEven }: { isEven: boolean }) {
   const section = useWeddingSection("timeline") as TimelineSection;
-  const { title, subtitle, timeline } = section;
+  const { title, subtitle, timeline, transitionImage } = section;
   const isMobile = useIsMobile();
 
   if (!title || !timeline?.length) return null;
@@ -21,11 +21,7 @@ export function Timeline({ isEven }: { isEven: boolean }) {
       subtitle={subtitle}
       isEven={isEven}
     >
-      {isMobile ? (
-        <TimelineMobile timeline={timeline} />
-      ) : (
-        <TimelineDesktop timeline={timeline} />
-      )}
+      <TimelineDesktop timeline={timeline} transitionImage={transitionImage} />
     </WeddingLayout>
   );
 }

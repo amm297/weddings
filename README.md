@@ -91,3 +91,31 @@ bun run dev:firebase:persist
 ```
 
 This ensures that your development data (Firestore documents, authentication users, storage files) is preserved even when you stop and restart the emulators.
+
+## Image Processing
+
+This project includes a script to process images for Firestore upload by resizing, optimizing, and converting them to compressed base64 format.
+
+### Processing Images
+
+```bash
+# Process a single image
+bun run process:images path/to/image.jpg [output-path] [width] [height] [quality] [format] [preserveAspectRatio]
+
+# Process all images in a directory
+bun run process:images path/to/images/directory [output-directory] [width] [height] [quality] [format] [preserveAspectRatio]
+
+# Example with all parameters (optimal for Firestore)
+bun run process:images image.jpg output.txt 300 0 80 webp true
+```
+
+Parameters:
+- `source-image-or-dir`: Path to the image or directory to process (required)
+- `output-path`: Path where to save the output (defaults to public/images/processed)
+- `width`: Target width in pixels (set to 0 to auto-calculate based on height and aspect ratio)
+- `height`: Target height in pixels (set to 0 to auto-calculate based on width and aspect ratio)
+- `quality`: Compression quality from 1-100 (defaults to 80)
+- `format`: Output format - webp, jpeg, png, avif (defaults to webp)
+- `preserveAspectRatio`: Whether to preserve aspect ratio (true/false, defaults to true)
+
+The script optimizes images for Firestore storage by using WebP format and appropriate compression. It can output directly to text files for easy copying into Firestore string fields.
