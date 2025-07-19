@@ -2,7 +2,7 @@ import { Timeline } from "@/db";
 import { TimelineStep } from "./TimelineStep";
 import { cn } from "@/lib/utils";
 
-export default function TimelineDesktop({
+export default function TimelineLayout({
   timeline,
   transitionImage,
 }: {
@@ -11,10 +11,12 @@ export default function TimelineDesktop({
 }) {
   const w = 1 / timeline.length;
   return (
-    <div className="flex flex-row w-full flex-grow p-5">
+    <div className="flex w-full flex-grow p-5 flex-col md:flex-row">
       {timeline.map((step, index) => (
         <div
-          className={cn("flex flex-row flex-grow justify-center items-center")}
+          className={cn(
+            "flex flex-grow justify-center items-center flex-col md:flex-row"
+          )}
         >
           <TimelineStep key={step.text} timeline={step} />
           {transitionImage && index < timeline.length - 1 && (

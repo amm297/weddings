@@ -16,7 +16,7 @@ export const TimelineStep = ({
   const renderImage = () => {
     return (
       <div className={cn()}>
-        <img src={image} alt={text} className=" object-contain" />
+        <img src={image} alt={text} className="object-contain scale-125 md:scale-100" />
       </div>
     );
   };
@@ -24,8 +24,8 @@ export const TimelineStep = ({
   return (
     <div
       className={cn(
-        "flex items-center h-full justify-between gap-8",
-        isUp ? "flex-col" : "flex-col-reverse"
+        "flex items-center h-full justify-between gap-8 w-full",
+        isUp ? "flex-row md:flex-col" : "flex-row-reverse md:flex-col-reverse"
       )}
     >
       {renderImage()}
