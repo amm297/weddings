@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import { SectionStyle } from "@/db";
+import { ImageBackground } from "./layout/ImageBackground";
+import { ImageSide } from "./layout/ImageSide";
 
 export interface WeddingLayoutProps {
   isEven: boolean;
@@ -18,59 +20,81 @@ export function WeddingLayout({
   subtitle,
   sectionStyle,
 }: WeddingLayoutProps) {
-  const hasBackgroundImage = Boolean(sectionStyle?.image);
+  const hasBackgroundImage =
+    Boolean(sectionStyle?.image) &&
+    sectionStyle?.imagePosition === "background";
+
+  const hasSideImage =
+    Boolean(sectionStyle?.image) &&
+    ["left", "right"].includes(sectionStyle?.imagePosition || "");
+
+  const imagePosition = sectionStyle?.imagePosition || "";
+
+  if (id == "faq") {
+    console.log(sectionStyle);
+  }
 
   return (
     <section
       id={id}
       className={cn(
-        "py-12 md:py-20 relative scroll-mt-20",
+        "py-12 md:py-20 relative scroll-mt-20 overflow-hidden",
         isEven ? "bg-background" : "bg-primary/10"
       )}
     >
-      {sectionStyle?.image && (
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${sectionStyle.image})`,
-            backgroundSize: "100%",
-            backgroundPosition: "center",
-          }}
-        >
-          {sectionStyle.overlay && (
-            <div className="absolute inset-0 bg-overlay/[74%]" />
-          )}
-        </div>
-      )}
+      <ImageBackground {...(sectionStyle ?? {})} />
+      <ImageSide id={id} {...(sectionStyle ?? {})} />
+
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <h2
+        <div
           className={cn(
-            "text-3xl md:text-5xl font-sectionHeadline text-center uppercase tracking-wider mb-2",
-            hasBackgroundImage ? "text-white drop-shadow-md" : "text-foreground"
+            "max-w-6xl mx-auto",
+            hasSideImage && imagePosition === "left" && "text-right",
+            hasSideImage && imagePosition === "right" && "text-left"
           )}
         >
-          {title}
-        </h2>
-        {subtitle && (
-          <p
+          <h2
             className={cn(
-              "text-center",
+              "text-3xl md:text-5xl font-sectionHeadline uppercase tracking-wider mb-2",
+              !hasSideImage && "text-center",
               hasBackgroundImage
-                ? "text-white/90 drop-shadow-md"
-                : "text-foreground/40"
+                ? "text-white drop-shadow-md"
+                : "text-foreground"
             )}
           >
-            {subtitle}
-          </p>
-        )} 
+            {title}
+          </h2>
+          {subtitle && (
+            <p
+              className={cn(
+                !hasSideImage && "text-center",
+                hasBackgroundImage
+                  ? "text-white/90 drop-shadow-md"
+                  : "text-foreground/40"
+              )}
+            >
+              {subtitle}
+            </p>
+          )}
+        </div>
 
         <div
+          id={`${id}-content`}
           className={cn(
-            "max-w-6xl mx-auto mt-8",
-            hasBackgroundImage && "text-white"
+            "max-w-6xl mx-auto mt-8 relative min-h-[400px] flex",
+            hasBackgroundImage && "text-white",
+            hasSideImage && imagePosition === "left" && "justify-end",
+            hasSideImage && imagePosition === "right" && "justify-start"
           )}
         >
-          {children}
+          <div
+            className={cn(
+              "flex-1",
+              hasSideImage ? "max-w-[50%] px-8" : "w-full"
+            )}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </section>
