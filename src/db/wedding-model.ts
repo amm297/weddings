@@ -76,6 +76,7 @@ export interface CeremonySection extends Section {
   location: Location;
   date: Date;
   timezone: string;
+  countdown?: boolean;
 }
 
 export interface FAQSection extends Section {

@@ -3,9 +3,10 @@ import { CeremonySection } from "@/db";
 import { cn } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import Link from "next/link";
+import { TimerClean } from "../countdown/TimerClean";
 
 export function Ceremony({ section }: { section: CeremonySection }) {
-  const { couple, date } = section;
+  const { couple, date, countdown } = section;
 
   return (
     <div>
@@ -24,6 +25,12 @@ export function Ceremony({ section }: { section: CeremonySection }) {
           {formatDate(date, "dd.MM.yyyy")}
         </p>
       </div>
+
+      {countdown && (
+        <div className="mt-10">
+          <TimerClean />
+        </div>
+      )}
       <div className="mt-10 flex flex-wrap gap-4 justify-center">
         <Button
           variant="default"
@@ -34,7 +41,7 @@ export function Ceremony({ section }: { section: CeremonySection }) {
             "hover:bg-primary/90 transition-all"
           )}
         >
-          <Link href={`#rsvp`}>RSVP</Link>
+          <Link href={`#rsvp`}>Confirmar Asistencia</Link>
         </Button>
       </div>
     </div>
