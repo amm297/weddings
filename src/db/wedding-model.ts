@@ -51,7 +51,7 @@ export interface Section {
   title?: string;
   subtitle?: string;
   description?: string | string[];
-  icon?: string;
+  icon?: string;  
   backgroundImage?: string;
   overlay?: boolean;
   cta?: SectionCTA;
@@ -60,6 +60,7 @@ export interface Section {
 export interface SectionCTA {
   text: string;
   link: string;
+  target?: "_blank" | "_self" | "_parent" | "_top";
 }
 
 export interface CeremonySection extends Section {

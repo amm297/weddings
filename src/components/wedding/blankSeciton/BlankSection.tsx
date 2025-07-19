@@ -33,7 +33,9 @@ export function BlankSection({ section }: { section: Section }) {
             asChild
             className={cn("font-headline tracking-wide ")}
           >
-            <Link href={cta.link}>{cta.text}</Link>
+            <Link href={cta.link} target={cta.target}>
+              {cta.text}
+            </Link>
           </Button>
         </div>
       )}
