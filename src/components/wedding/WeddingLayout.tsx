@@ -49,14 +49,18 @@ export function WeddingLayout({
         <div
           className={cn(
             "max-w-6xl mx-auto",
-            hasSideImage && imagePosition === "left" && "text-right",
-            hasSideImage && imagePosition === "right" && "text-left"
+            hasSideImage && "md:text-left",
+            hasSideImage && imagePosition === "left" && "md:text-right",
+            hasSideImage && imagePosition === "right" && "md:text-left"
           )}
         >
           <h2
             className={cn(
               "text-3xl md:text-5xl font-sectionHeadline uppercase tracking-wider mb-2",
-              !hasSideImage && "text-center",
+              "text-center md:text-left",
+              !hasSideImage && "md:text-center",
+              hasSideImage && imagePosition === "left" && "md:text-right",
+              hasSideImage && imagePosition === "right" && "md:text-left",
               hasBackgroundImage
                 ? "text-white drop-shadow-md"
                 : "text-foreground"
@@ -67,7 +71,10 @@ export function WeddingLayout({
           {subtitle && (
             <p
               className={cn(
-                !hasSideImage && "text-center",
+                "text-center md:text-left",
+                !hasSideImage && "md:text-center",
+                hasSideImage && imagePosition === "left" && "md:text-right",
+                hasSideImage && imagePosition === "right" && "md:text-left",
                 hasBackgroundImage
                   ? "text-white/90 drop-shadow-md"
                   : "text-foreground/40"
@@ -83,14 +90,14 @@ export function WeddingLayout({
           className={cn(
             "max-w-6xl mx-auto mt-8 relative min-h-[400px] flex",
             hasBackgroundImage && "text-white",
-            hasSideImage && imagePosition === "left" && "justify-end",
-            hasSideImage && imagePosition === "right" && "justify-start"
+            hasSideImage && imagePosition === "left" && "md:justify-end",
+            hasSideImage && imagePosition === "right" && "md:justify-start"
           )}
         >
           <div
             className={cn(
               "flex-1",
-              hasSideImage ? "max-w-[50%] px-8" : "w-full"
+              hasSideImage ? "w-full md:max-w-[50%] md:px-8" : "w-full"
             )}
           >
             {children}
