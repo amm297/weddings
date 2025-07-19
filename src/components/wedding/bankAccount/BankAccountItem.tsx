@@ -22,7 +22,7 @@ export const BankAccountItem = ({
             {buttonText}
           </Button>
         ) : (
-          <p className="mt-2 text-center font-mono tracking-wider text-primary">
+          <p className="mt-2 text-center font-mono tracking-wider text-primary bg-white/90 p-4 rounded-lg">
             {formatAccountNumber(accountNumber)}
           </p>
         )}
