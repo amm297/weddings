@@ -30,10 +30,6 @@ export function WeddingLayout({
 
   const imagePosition = sectionStyle?.imagePosition || "";
 
-  if (id == "faq") {
-    console.log(sectionStyle);
-  }
-
   return (
     <section
       id={id}

@@ -9,6 +9,8 @@ import {
   isBefore,
   parseISO,
   Locale,
+  parse,
+  isSameDay,
 } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -19,6 +21,42 @@ import { es } from "date-fns/locale";
 // Default settings for Spain
 export const DEFAULT_LOCALE = es;
 export const DEFAULT_TIMEZONE = "Europe/Madrid";
+
+export const parseDate = (
+  date: string | undefined | Date | { seconds: number; nanoseconds: number },
+  format?: string
+): Date => {
+  if (!date) return new Date();
+
+  // If it's already a Date object, return it
+  if (date instanceof Date) {
+    return date;
+  }
+
+  // If it's a string
+  if (typeof date === "string") {
+    // Check if it looks like an ISO date (contains T and Z)
+    if (date.includes("T") && (date.includes("Z") || date.includes("+"))) {
+      return parseISO(date);
+    }
+
+    // If format is provided, use parse
+    if (format) {
+      return parse(date, format, new Date(), { locale: DEFAULT_LOCALE });
+    }
+
+    // Default to parseISO for other string formats
+    return parseISO(date);
+  }
+
+  // Handle Firebase Timestamp
+  if (typeof date === "object" && "seconds" in date && "nanoseconds" in date) {
+    return new Date(date.seconds * 1000);
+  }
+
+  // Fallback
+  return new Date();
+};
 
 /**
  * Convert Firebase Timestamp or Date object to serializable format
@@ -74,21 +112,44 @@ export const getTimeDifference = (
   hours: number;
   minutes: number;
   seconds: number;
+  totalSeconds: number;
+  percentComplete: number;
+  isToday: boolean;
 } => {
   const target =
     typeof targetDate === "string" ? parseISO(targetDate) : targetDate;
   const base = typeof baseDate === "string" ? parseISO(baseDate) : baseDate;
 
   if (isBefore(target, base)) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      totalSeconds: 0,
+      percentComplete: 100, // If target date is in the past, percentage is 100%
+      isToday: false,
+    };
   }
 
   const days = differenceInDays(target, base);
   const hours = differenceInHours(target, base) % 24;
   const minutes = differenceInMinutes(target, base) % 60;
   const seconds = differenceInSeconds(target, base) % 60;
+  const totalSeconds = differenceInSeconds(target, base);
+  // Don't calculate percentComplete here, it will be calculated in the component
+  const percentComplete = 0;
+  const isToday = isSameDay(target, base);
 
-  return { days, hours, minutes, seconds };
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    totalSeconds,
+    percentComplete,
+    isToday,
+  };
 };
 
 /**

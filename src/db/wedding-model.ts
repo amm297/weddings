@@ -48,6 +48,7 @@ export interface Section {
     | "faq"
     | "hotel"
     | "bankaccount"
+    | "countdown"
     | "rsvp";
   title?: string;
   subtitle?: string;

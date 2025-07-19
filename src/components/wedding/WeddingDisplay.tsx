@@ -9,6 +9,7 @@ import { Fragment } from "react";
 import { Section } from "@/db";
 import { RSVP } from "./Rsvp";
 import { DefaultSection } from "./DefaultSection";
+import { CountdownTimer } from "./CountdownTimer";
 
 export function WeddingDisplay() {
   const config = useWeddingConfig();
@@ -20,6 +21,8 @@ export function WeddingDisplay() {
     switch (section?.layout?.toLowerCase()) {
       case "default":
         return <DefaultSection id={section.id} isEven={isEven} />;
+      case "countdown":
+        return <CountdownTimer isEven={isEven} />;
       case "timeline":
         return <Timeline isEven={isEven} />;
       case "faq":

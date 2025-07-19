@@ -1,15 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
+import { getTimeDifference, parseDate } from "@/lib/date-utils";
 
 export function Timer() {
-  const { date } = useWeddingConfig();
-  const targetDate = date.date;
+  const { summary } = useWeddingConfig();
+
+  // Parse the date once and memoize it to prevent re-renders
+  const targetDate = useMemo(() => parseDate(summary.date), [summary.date]);
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -18,7 +21,7 @@ export function Timer() {
     seconds: 0,
     totalSeconds: 0,
     percentComplete: 0,
-    isWeddingDay: false,
+    isToday: false,
   });
   const [isClient, setIsClient] = useState(false);
 
@@ -29,66 +32,33 @@ export function Timer() {
   useEffect(() => {
     if (!isClient) return;
 
-    const calculateTimeLeft = () => {
+    // Calculate the percentage separately to avoid infinite loop
+    const calculatePercentage = () => {
+      // Create a date 1 year before the wedding for percentage calculation
+      const weddingAnnouncement = new Date(targetDate);
+      weddingAnnouncement.setFullYear(weddingAnnouncement.getFullYear() - 1);
+
       const now = new Date();
-      const difference = +targetDate - +now;
-      let newTimeLeft = {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        totalSeconds: 0,
-        percentComplete: 0,
-        isWeddingDay: false,
-      };
+      const totalDuration = +targetDate - +weddingAnnouncement;
+      const elapsed = +now - +weddingAnnouncement;
 
-      if (difference > 0) {
-        // Calculate total seconds from wedding announcement (1 year before wedding)
-        const weddingAnnouncement = new Date(targetDate);
-        weddingAnnouncement.setFullYear(weddingAnnouncement.getFullYear() - 1);
-        const totalDuration = +targetDate - +weddingAnnouncement;
-        const elapsed = +now - +weddingAnnouncement;
-        const percentComplete = Math.min(
-          100,
-          Math.max(0, (elapsed / totalDuration) * 100)
-        );
-
-        newTimeLeft = {
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-          totalSeconds: Math.floor(difference / 1000),
-          percentComplete,
-          isWeddingDay: false,
-        };
-      } else {
-        // It's the wedding day or after
-        newTimeLeft = {
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          totalSeconds: 0,
-          percentComplete: 100,
-          isWeddingDay: true,
-        };
-      }
-
-      return newTimeLeft;
+      return Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
     };
 
-    setTimeLeft(calculateTimeLeft());
+    const updateTimeLeft = () => {
+      const diff = getTimeDifference(targetDate);
+      const percentage = calculatePercentage();
 
-    const timer = setInterval(() => {
-      const currentTimeLeft = calculateTimeLeft();
-      setTimeLeft(currentTimeLeft);
+      setTimeLeft({
+        ...diff,
+        percentComplete: percentage,
+      });
+    };
 
-      // Clear interval if it's wedding day
-      if (currentTimeLeft.isWeddingDay) {
-        clearInterval(timer);
-      }
-    }, 1000);
+    // Initial update
+    updateTimeLeft();
+
+    const timer = setInterval(updateTimeLeft, 1000);
 
     return () => clearInterval(timer);
   }, [targetDate, isClient]);
@@ -106,13 +76,13 @@ export function Timer() {
         <div className="mb-6">
           <Progress value={timeLeft.percentComplete} className="h-2" />
           <p className="text-sm text-muted-foreground text-center mt-2">
-            {timeLeft.isWeddingDay
+            {timeLeft.isToday
               ? "¡Es hoy!"
               : `${timeLeft.percentComplete.toFixed(0)}% de la boda!`}
           </p>
         </div>
 
-        {timeLeft.isWeddingDay ? (
+        {timeLeft.isToday ? (
           <div className="text-center py-8">
             <p className="text-3xl md:text-4xl font-headline text-primary">
               ¡Llegó el día de nuestra boda!
