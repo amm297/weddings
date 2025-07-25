@@ -128,10 +128,16 @@ export interface RsvpSection extends Section {
   form?: string;
 }
 
+export interface Contact {
+  email?: string;
+  phone?: string;
+}
+
 export interface Summary {
   couple: Couple;
   date: Date;
-  location: string;
+  location?: Location;
+  contact?: Contact;
 }
 
 export interface WeddingConfig {
