@@ -63,6 +63,7 @@ export interface SectionStyle {
   image?: string;
   overlay?: boolean;
   imagePosition?: "left" | "right" | "background";
+  noRepeat?: boolean;
 }
 
 export interface SectionCTA {

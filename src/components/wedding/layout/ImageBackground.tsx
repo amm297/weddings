@@ -4,6 +4,7 @@ export function ImageBackground({
   image,
   imagePosition,
   overlay,
+  noRepeat,
 }: SectionStyle) {
   if (imagePosition !== "background") return <></>;
 
@@ -12,9 +13,11 @@ export function ImageBackground({
       className="absolute inset-0 z-0"
       style={{
         backgroundImage: `url(${image})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
+        ...(!noRepeat && {
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }),
       }}
     >
       {overlay && <div className="absolute inset-0 bg-overlay/[60%]" />}

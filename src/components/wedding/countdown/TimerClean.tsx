@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
 import { getTimeDifference, parseDate } from "@/lib/date-utils";
