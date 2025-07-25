@@ -23,7 +23,7 @@ export function Footer() {
             <p className="font-sageffine text-2xl text-primary">{coupleName}</p>
             <p className="text-sm mt-1 text-foreground/70 flex items-center justify-center md:justify-start gap-1">
               <Calendar className="w-3 h-3" />
-              <span>
+              <span className="first-letter:uppercase">
                 {formatDate(summary?.date, "EEEE, d 'de' MMMM 'de' yyyy")}
               </span>
             </p>
