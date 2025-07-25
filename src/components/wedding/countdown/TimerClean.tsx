@@ -7,13 +7,17 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
 import { getTimeDifference, parseDate } from "@/lib/date-utils";
+import { toZonedTime } from "date-fns-tz";
+
+// Define CEST timezone
+const CEST_TIMEZONE = "Europe/Paris";
 
 export function TimerClean() {
   const { summary } = useWeddingConfig();
 
   // Parse the date once and memoize it to prevent re-renders
   const targetDate = useMemo(
-    () => parseDate(summary.ceremonyStart),
+    () => parseDate(summary.ceremonyStart, undefined, CEST_TIMEZONE),
     [summary.ceremonyStart]
   );
 
@@ -41,7 +45,7 @@ export function TimerClean() {
       const weddingAnnouncement = new Date(targetDate);
       weddingAnnouncement.setFullYear(weddingAnnouncement.getFullYear() - 1);
 
-      const now = new Date();
+      const now = toZonedTime(new Date(), CEST_TIMEZONE);
       const totalDuration = +targetDate - +weddingAnnouncement;
       const elapsed = +now - +weddingAnnouncement;
 
@@ -49,7 +53,7 @@ export function TimerClean() {
     };
 
     const updateTimeLeft = () => {
-      const diff = getTimeDifference(targetDate);
+      const diff = getTimeDifference(targetDate, new Date(), CEST_TIMEZONE);
       const percentage = calculatePercentage();
 
       setTimeLeft({
