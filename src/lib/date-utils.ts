@@ -11,8 +11,10 @@ import {
   Locale,
   parse,
   isSameDay,
+  sub,
 } from "date-fns";
 import { es } from "date-fns/locale";
+import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 /**
  * Date formatting utilities - façade for date-fns
@@ -24,7 +26,8 @@ export const DEFAULT_TIMEZONE = "Europe/Madrid";
 
 export const parseDate = (
   date: string | undefined | Date | { seconds: number; nanoseconds: number },
-  format?: string
+  format?: string,
+  timezone: string = DEFAULT_TIMEZONE
 ): Date => {
   if (!date) return new Date();
 
@@ -37,32 +40,39 @@ export const parseDate = (
   if (typeof date === "string") {
     // Check if it looks like an ISO date (contains T and Z)
     if (date.includes("T") && (date.includes("Z") || date.includes("+"))) {
-      return parseISO(date);
+      // Parse ISO date and convert to the specified timezone
+      return toZonedTime(parseISO(date), timezone);
     }
 
-    // If format is provided, use parse
+    // If format is provided, use parse and convert to the specified timezone
     if (format) {
-      return parse(date, format, new Date(), { locale: DEFAULT_LOCALE });
+      const parsedDate = parse(date, format, new Date(), {
+        locale: DEFAULT_LOCALE,
+      });
+      return toZonedTime(parsedDate, timezone);
     }
 
-    // Default to parseISO for other string formats
-    return parseISO(date);
+    // Default to parseISO for other string formats and convert to the specified timezone
+    return toZonedTime(parseISO(date), timezone);
   }
 
   // Handle Firebase Timestamp
   if (typeof date === "object" && "seconds" in date && "nanoseconds" in date) {
-    return new Date(date.seconds * 1000);
+    return toZonedTime(new Date(date.seconds * 1000), timezone);
   }
 
   // Fallback
-  return new Date();
+  return toZonedTime(new Date(), timezone);
 };
 
 /**
  * Convert Firebase Timestamp or Date object to serializable format
  * This helps avoid "Only plain objects can be passed to Client Components from Server Components" errors
  */
-export const serializeDate = (date: any): string => {
+export const serializeDate = (
+  date: any,
+  timezone: string = DEFAULT_TIMEZONE
+): string => {
   if (!date) return "";
 
   // Handle Firebase Timestamp
@@ -72,12 +82,17 @@ export const serializeDate = (date: any): string => {
     "seconds" in date &&
     "nanoseconds" in date
   ) {
-    return new Date(date.seconds * 1000).toISOString();
+    const dateObj = toZonedTime(new Date(date.seconds * 1000), timezone);
+    return formatInTimeZone(dateObj, timezone, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
+      locale: DEFAULT_LOCALE,
+    });
   }
 
   // Handle regular Date objects
   if (date instanceof Date) {
-    return date.toISOString();
+    return formatInTimeZone(date, timezone, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
+      locale: DEFAULT_LOCALE,
+    });
   }
 
   // If it's already a string, return as is
@@ -95,10 +110,26 @@ export const serializeDate = (date: any): string => {
 export const formatDate = (
   date: Date | string | number,
   formatStr: string,
-  options?: { locale?: Locale }
+  options?: { locale?: Locale; timezone?: string }
 ): string => {
+  const timezone = options?.timezone || DEFAULT_TIMEZONE;
   const dateObj = typeof date === "string" ? parseISO(date) : date;
-  return format(dateObj, formatStr, { locale: DEFAULT_LOCALE, ...options });
+  const zonedDate = toZonedTime(dateObj, timezone);
+  return formatInTimeZone(zonedDate, timezone, formatStr, {
+    locale: DEFAULT_LOCALE,
+    ...options,
+  });
+};
+
+export const formatDateNoLocale = (
+  date: Date | string | number,
+  formatStr: string,
+  options?: { locale?: Locale; timezone?: string }
+): string => {
+  const timezone = options?.timezone || DEFAULT_TIMEZONE;
+  const dateObj = typeof date === "string" ? parseISO(date) : date;
+  const zonedDate = toZonedTime(dateObj, timezone);
+  return formatInTimeZone(zonedDate, timezone, formatStr, { ...options });
 };
 
 /**
@@ -106,7 +137,8 @@ export const formatDate = (
  */
 export const getTimeDifference = (
   targetDate: Date | string,
-  baseDate: Date | string = new Date()
+  baseDate: Date | string = new Date(),
+  timezone: string = DEFAULT_TIMEZONE
 ): {
   days: number;
   hours: number;
@@ -117,8 +149,13 @@ export const getTimeDifference = (
   isToday: boolean;
 } => {
   const target =
-    typeof targetDate === "string" ? parseISO(targetDate) : targetDate;
-  const base = typeof baseDate === "string" ? parseISO(baseDate) : baseDate;
+    typeof targetDate === "string"
+      ? toZonedTime(parseISO(targetDate), timezone)
+      : toZonedTime(targetDate, timezone);
+  const base =
+    typeof baseDate === "string"
+      ? toZonedTime(parseISO(baseDate), timezone)
+      : toZonedTime(baseDate, timezone);
 
   if (isBefore(target, base)) {
     return {
@@ -155,25 +192,43 @@ export const getTimeDifference = (
 /**
  * Format a date in a human-readable format (Month Day, Year)
  */
-export const formatFullDate = (date: Date | string): string => {
+export const formatFullDate = (
+  date: Date | string,
+  timezone: string = DEFAULT_TIMEZONE
+): string => {
   const dateObj = typeof date === "string" ? parseISO(date) : date;
-  return format(dateObj, "MMMM d, yyyy", { locale: DEFAULT_LOCALE });
+  const zonedDate = toZonedTime(dateObj, timezone);
+  return formatInTimeZone(zonedDate, timezone, "MMMM d, yyyy", {
+    locale: DEFAULT_LOCALE,
+  });
 };
 
 /**
  * Format a date with day of week (Day of Week, Month Day, Year)
  */
-export const formatDateWithDay = (date: Date | string): string => {
+export const formatDateWithDay = (
+  date: Date | string,
+  timezone: string = DEFAULT_TIMEZONE
+): string => {
   const dateObj = typeof date === "string" ? parseISO(date) : date;
-  return format(dateObj, "EEEE, MMMM d, yyyy", { locale: DEFAULT_LOCALE });
+  const zonedDate = toZonedTime(dateObj, timezone);
+  return formatInTimeZone(zonedDate, timezone, "EEEE, MMMM d, yyyy", {
+    locale: DEFAULT_LOCALE,
+  });
 };
 
 /**
  * Format a date in short format (MM/DD/YYYY)
  */
-export const formatShortDate = (date: Date | string): string => {
+export const formatShortDate = (
+  date: Date | string,
+  timezone: string = DEFAULT_TIMEZONE
+): string => {
   const dateObj = typeof date === "string" ? parseISO(date) : date;
-  return format(dateObj, "dd/MM/yyyy", { locale: DEFAULT_LOCALE });
+  const zonedDate = toZonedTime(dateObj, timezone);
+  return formatInTimeZone(zonedDate, timezone, "dd/MM/yyyy", {
+    locale: DEFAULT_LOCALE,
+  });
 };
 
 /**
@@ -181,10 +236,17 @@ export const formatShortDate = (date: Date | string): string => {
  */
 export const getRelativeTime = (
   date: Date | string,
-  baseDate: Date | string = new Date()
+  baseDate: Date | string = new Date(),
+  timezone: string = DEFAULT_TIMEZONE
 ): string => {
-  const target = typeof date === "string" ? parseISO(date) : date;
-  const base = typeof baseDate === "string" ? parseISO(baseDate) : baseDate;
+  const target =
+    typeof date === "string"
+      ? toZonedTime(parseISO(date), timezone)
+      : toZonedTime(date, timezone);
+  const base =
+    typeof baseDate === "string"
+      ? toZonedTime(parseISO(baseDate), timezone)
+      : toZonedTime(baseDate, timezone);
 
   return formatDistance(target, base, {
     addSuffix: true,
@@ -195,10 +257,17 @@ export const getRelativeTime = (
 /**
  * Check if a date has passed
  */
-export const isDatePassed = (date: Date | string | undefined): boolean => {
+export const isDatePassed = (
+  date: Date | string | undefined,
+  timezone: string = DEFAULT_TIMEZONE
+): boolean => {
   if (!date) return false;
-  const dateObj = typeof date === "string" ? parseISO(date) : date;
-  return isAfter(new Date(), dateObj);
+  const dateObj =
+    typeof date === "string"
+      ? toZonedTime(parseISO(date), timezone)
+      : toZonedTime(date, timezone);
+  const now = toZonedTime(new Date(), timezone);
+  return isAfter(now, dateObj);
 };
 
 /**
@@ -207,4 +276,29 @@ export const isDatePassed = (date: Date | string | undefined): boolean => {
 export const formatTime = (timeStr: string): string => {
   // This is a pass-through function in case we need to modify time formatting later
   return timeStr;
+};
+
+export const subTime = (
+  date: Date | string,
+  { hours, minutes }: { hours: number; minutes: number },
+  timezone: string = DEFAULT_TIMEZONE
+): Date => {
+  const dateObj =
+    typeof date === "string"
+      ? toZonedTime(parseISO(date), timezone)
+      : toZonedTime(date, timezone);
+  return toZonedTime(sub(dateObj, { hours, minutes }), timezone);
+};
+
+/**
+ * Format a date for Google Calendar in the correct format with timezone handling
+ * Google Calendar expects dates in UTC format
+ */
+export const formatForGoogleCalendar = (
+  date: Date | string,
+  timezone: string = DEFAULT_TIMEZONE
+): string => {
+  const dateObj = typeof date === "string" ? parseISO(date) : date;
+  // Convert to UTC time for Google Calendar
+  return dateObj.toISOString().replace(/[-:]/g, "").substring(0, 15);
 };

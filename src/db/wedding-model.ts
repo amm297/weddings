@@ -136,6 +136,8 @@ export interface Contact {
 export interface Summary {
   couple: Couple;
   date: Date;
+  ceremonyStart?: Date;
+  ceremonyEnd?: Date;
   location?: Location;
   contact?: Contact;
 }
@@ -197,12 +199,19 @@ export class WeddingModel extends BaseModel<WeddingDocument> {
     const serialized = { ...wedding } as any;
 
     // Serialize summary date
-    if (serialized.summary?.date) {
-      serialized.summary = {
-        ...serialized.summary,
+
+    serialized.summary = {
+      ...serialized.summary,
+      ...(serialized.summary?.date && {
         date: serializeDate(serialized.summary.date),
-      };
-    }
+      }),
+      ...(serialized.summary?.ceremonyStart && {
+        ceremonyStart: serializeDate(serialized.summary.ceremonyStart),
+      }),
+      ...(serialized.summary?.ceremonyEnd && {
+        ceremonyEnd: serializeDate(serialized.summary.ceremonyEnd),
+      }),
+    };
 
     // Serialize dates in sections
     if (serialized.sections && Array.isArray(serialized.sections)) {

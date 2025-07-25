@@ -5,15 +5,49 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useWeddingConfig } from "@/hooks/use-wedding-config";
-import { formatDate } from "@/lib/date-utils";
+import {
+  formatDate,
+  parseDate,
+  formatForGoogleCalendar,
+} from "@/lib/date-utils";
 import { useNavigationSections } from "@/hooks/use-navigation-sections";
 
 export function Footer() {
   const { summary } = useWeddingConfig();
+
   const sections = useNavigationSections();
   const currentYear = new Date().getFullYear();
 
   const coupleName = `${summary?.couple?.person1?.name} & ${summary?.couple?.person2?.name}`;
+
+  const addToCalendar = () => {
+    if (!summary?.ceremonyStart || !summary?.ceremonyEnd) return;
+
+    // Parse the dates to ensure they're Date objects
+    const startDate = parseDate(summary.ceremonyStart);
+    const endDate = parseDate(summary.ceremonyEnd);
+
+    // Format in Google Calendar format with proper timezone handling
+    const start = formatForGoogleCalendar(startDate);
+    const end = formatForGoogleCalendar(endDate);
+
+    console.log("Calendar dates:", start, end);
+
+    const params = {
+      text: `Boda de ${coupleName}`,
+      dates: `${start}/${end}`,
+      details: `Celebración de la boda de ${coupleName}`,
+      location: summary?.location?.name || "",
+    };
+
+    const queryString = Object.entries(params)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&${queryString}`;
+
+    window.open(googleCalendarUrl, "_blank");
+  };
 
   return (
     <footer className="bg-accent py-12">
@@ -21,7 +55,10 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0 text-center md:text-left">
             <p className="font-sageffine text-2xl text-primary">{coupleName}</p>
-            <p className="text-sm mt-1 text-foreground/70 flex items-center justify-center md:justify-start gap-1">
+            <p
+              className="text-sm mt-1 text-foreground/70 flex items-center justify-center md:justify-start gap-1 hover:cursor-pointer"
+              onClick={addToCalendar}
+            >
               <Calendar className="w-3 h-3" />
               <span className="first-letter:uppercase">
                 {formatDate(summary?.date, "EEEE, d 'de' MMMM 'de' yyyy")}
