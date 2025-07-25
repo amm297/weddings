@@ -41,10 +41,18 @@ export function Footer() {
         <Separator className="my-6 bg-primary/20" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="text-center md:text-left">
+          <div
+            className="text-center md:text-left hover:cursor-pointer"
+            onClick={() => {
+              window.open(summary?.location?.googleMapsUrl, "_blank");
+            }}
+          >
             <h3 className="font-headline text-lg mb-2">Lugar</h3>
             <p className="text-sm text-foreground/70">
               {summary?.location?.name}
+            </p>
+            <p className="text-sm text-foreground/70">
+              {summary?.location?.address}
             </p>
           </div>
 
