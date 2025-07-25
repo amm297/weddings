@@ -84,7 +84,7 @@ export function WeddingLayout({
         <div
           id={`${id}-content`}
           className={cn(
-            "max-w-6xl mx-auto mt-8 relative min-h-[400px] flex",
+            "max-w-6xl mx-auto mt-8 relative flex",
             hasBackgroundImage && "text-white",
             hasSideImage && imagePosition === "left" && "md:justify-end",
             hasSideImage && imagePosition === "right" && "md:justify-start"
