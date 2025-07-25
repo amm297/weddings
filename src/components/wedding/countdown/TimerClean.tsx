@@ -12,7 +12,10 @@ export function TimerClean() {
   const { summary } = useWeddingConfig();
 
   // Parse the date once and memoize it to prevent re-renders
-  const targetDate = useMemo(() => parseDate(summary.date), [summary.date]);
+  const targetDate = useMemo(
+    () => parseDate(summary.ceremonyStart),
+    [summary.ceremonyStart]
+  );
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
