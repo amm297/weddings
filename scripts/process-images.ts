@@ -9,10 +9,11 @@ const sourceImage = args[0];
 const outputPath = args[1];
 const width = args[2] ? parseInt(args[2], 10) : 0;
 const height = args[3] ? parseInt(args[3], 10) : 0;
-const quality = args[4] ? parseInt(args[4], 10) : 80;
+const quality = args[4] ? parseInt(args[4], 10) : 90; // Increased default quality to 90
 const format = args[5] || "webp"; // webp is more efficient than jpg/png
 const preserveAspectRatio =
   args[6] === "true" || args[6] === undefined || args[6] === "1";
+const preserveResolution = args[7] === "true" || args[7] === "1"; // New parameter to preserve original resolution
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,7 @@ dotenv.config();
  * @param quality Compression quality (1-100)
  * @param format Output format (webp, jpeg, png)
  * @param preserveAspectRatio Whether to preserve the aspect ratio
+ * @param preserveResolution Whether to preserve original resolution (overrides width/height)
  * @returns Promise with base64 string of the processed image
  */
 async function processImage(
@@ -33,31 +35,40 @@ async function processImage(
   outputPath: string,
   width: number = 0,
   height: number = 0,
-  quality: number = 80,
+  quality: number = 90,
   format: string = "webp",
-  preserveAspectRatio: boolean = true
+  preserveAspectRatio: boolean = true,
+  preserveResolution: boolean = false
 ): Promise<string> {
   try {
     console.log(`Processing image: ${imagePath}`);
     console.log(`Output: ${outputPath}`);
 
-    // Get image metadata to determine dimensions
+    // Get image metadata to determine dimensions and density
     const metadata = await sharp(imagePath).metadata();
     const originalWidth = metadata.width || 0;
     const originalHeight = metadata.height || 0;
     const originalRatio = originalWidth / originalHeight;
+    const originalDensity = metadata.density || 72; // Default to 72 DPI if not specified
 
     console.log(
       `Original dimensions: ${originalWidth}x${originalHeight} (ratio: ${originalRatio.toFixed(
         2
-      )})`
+      )}, DPI: ${originalDensity})`
     );
 
     // Calculate dimensions based on inputs and aspect ratio
     let targetWidth = width;
     let targetHeight = height;
 
-    if (preserveAspectRatio) {
+    // If preserveResolution is true, use original dimensions
+    if (preserveResolution) {
+      targetWidth = originalWidth;
+      targetHeight = originalHeight;
+      console.log(
+        `Preserving original resolution: ${targetWidth}x${targetHeight}`
+      );
+    } else if (preserveAspectRatio) {
       if (width > 0 && height === 0) {
         // Only width provided, calculate height
         targetHeight = Math.round(width / originalRatio);
@@ -65,19 +76,14 @@ async function processImage(
         // Only height provided, calculate width
         targetWidth = Math.round(height * originalRatio);
       } else if (width === 0 && height === 0) {
-        // Neither provided, use default of 240 for the smaller dimension
-        if (originalWidth > originalHeight) {
-          targetHeight = 240;
-          targetWidth = Math.round(240 * originalRatio);
-        } else {
-          targetWidth = 240;
-          targetHeight = Math.round(240 / originalRatio);
-        }
+        // Neither provided, use original dimensions for high quality
+        targetWidth = originalWidth;
+        targetHeight = originalHeight;
       }
     } else {
       // If not preserving aspect ratio, use defaults for any missing dimension
-      if (width === 0) targetWidth = 240;
-      if (height === 0) targetHeight = 240;
+      if (width === 0) targetWidth = originalWidth;
+      if (height === 0) targetHeight = originalHeight;
     }
 
     console.log(
@@ -93,28 +99,51 @@ async function processImage(
     }
 
     // Configure sharp with the appropriate format and options
-    let sharpInstance = sharp(imagePath).resize(targetWidth, targetHeight, {
-      fit: preserveAspectRatio ? "inside" : "fill",
-      withoutEnlargement: true,
+    let sharpInstance = sharp(imagePath);
+
+    // Only resize if dimensions are different from original and preserveResolution is false
+    if (
+      (targetWidth !== originalWidth || targetHeight !== originalHeight) &&
+      !preserveResolution
+    ) {
+      sharpInstance = sharpInstance.resize(targetWidth, targetHeight, {
+        fit: preserveAspectRatio ? "inside" : "fill",
+        withoutEnlargement: true,
+      });
+    }
+
+    // Preserve the original DPI
+    sharpInstance = sharpInstance.withMetadata({
+      density: Math.max(originalDensity, 300), // Ensure minimum 300 DPI, but keep higher if available
     });
 
     // Apply format-specific optimizations
     switch (format.toLowerCase()) {
       case "webp":
-        sharpInstance = sharpInstance.webp({ quality });
+        sharpInstance = sharpInstance.webp({
+          quality,
+          lossless: quality >= 95,
+        });
         break;
       case "jpeg":
       case "jpg":
         sharpInstance = sharpInstance.jpeg({ quality, mozjpeg: true });
         break;
       case "png":
-        sharpInstance = sharpInstance.png({ quality, compressionLevel: 9 });
+        sharpInstance = sharpInstance.png({
+          quality,
+          compressionLevel: 9,
+          palette: quality < 95, // Use palette for lower quality settings
+        });
         break;
       case "avif":
         sharpInstance = sharpInstance.avif({ quality });
         break;
       default:
-        sharpInstance = sharpInstance.webp({ quality });
+        sharpInstance = sharpInstance.webp({
+          quality,
+          lossless: quality >= 95,
+        });
     }
 
     // Process the image and get buffer
@@ -146,6 +175,7 @@ async function processImage(
             height: targetHeight,
             quality,
             format,
+            dpi: Math.max(originalDensity, 300),
             timestamp: new Date().toISOString(),
           },
           null,
@@ -185,6 +215,7 @@ async function processImage(
  * @param quality Compression quality (1-100)
  * @param format Output format (webp, jpeg, png)
  * @param preserveAspectRatio Whether to preserve the aspect ratio
+ * @param preserveResolution Whether to preserve original resolution
  * @returns Object mapping filenames to their base64 representations
  */
 async function processDirectory(
@@ -192,9 +223,10 @@ async function processDirectory(
   outputDir: string,
   width: number = 0,
   height: number = 0,
-  quality: number = 80,
+  quality: number = 90,
   format: string = "webp",
-  preserveAspectRatio: boolean = true
+  preserveAspectRatio: boolean = true,
+  preserveResolution: boolean = false
 ): Promise<Record<string, string>> {
   try {
     // Check if source directory exists
@@ -240,7 +272,8 @@ async function processDirectory(
         height,
         quality,
         format,
-        preserveAspectRatio
+        preserveAspectRatio,
+        preserveResolution
       );
       results[file] = base64;
     });
@@ -262,6 +295,7 @@ async function processDirectory(
             quality,
             format,
             preserveAspectRatio,
+            preserveResolution,
           })),
           timestamp: new Date().toISOString(),
         },
@@ -284,13 +318,16 @@ async function main() {
     if (!sourceImage) {
       console.error("Error: No source image or directory specified");
       console.error(
-        "Usage: bun run scripts/process-images.ts <source-image-or-dir> [output-path] [width] [height] [quality] [format] [preserveAspectRatio]"
+        "Usage: bun run scripts/process-images.ts <source-image-or-dir> [output-path] [width] [height] [quality] [format] [preserveAspectRatio] [preserveResolution]"
       );
       console.error(
-        "Example: bun run scripts/process-images.ts image.jpg output.txt 300 0 80 webp true"
+        "Example: bun run scripts/process-images.ts image.jpg output.txt 300 0 90 webp true false"
       );
       console.error(
         "Note: Set width or height to 0 to auto-calculate based on aspect ratio"
+      );
+      console.error(
+        "Note: Set preserveResolution to true to maintain original image dimensions and quality"
       );
       process.exit(1);
     }
@@ -320,7 +357,8 @@ async function main() {
           height,
           quality,
           format,
-          preserveAspectRatio
+          preserveAspectRatio,
+          preserveResolution
         );
       } else {
         await processImage(
@@ -330,7 +368,8 @@ async function main() {
           height,
           quality,
           format,
-          preserveAspectRatio
+          preserveAspectRatio,
+          preserveResolution
         );
       }
     } else if (stats.isDirectory()) {
@@ -343,7 +382,8 @@ async function main() {
         height,
         quality,
         format,
-        preserveAspectRatio
+        preserveAspectRatio,
+        preserveResolution
       );
     } else {
       console.error(`Error: ${sourceImage} is neither a file nor a directory`);

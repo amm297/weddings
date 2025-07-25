@@ -23,6 +23,9 @@ const nextConfig: NextConfig = {
       },
     ],
     unoptimized: true,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    formats: ["image/avif", "image/webp"],
   },
 };
 
