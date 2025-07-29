@@ -1,9 +1,5 @@
 import {
-  format,
   formatDistance,
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
   differenceInSeconds,
   isAfter,
   isBefore,
@@ -135,10 +131,12 @@ export const formatDateNoLocale = (
 /**
  * Get time difference between two dates in days, hours, minutes, seconds
  */
+
 export const getTimeDifference = (
   targetDate: Date | string,
   baseDate: Date | string = new Date(),
-  timezone: string = DEFAULT_TIMEZONE
+  timezone: string = "Europe/Madrid",
+  startDate?: Date | string // opcional para porcentaje completado
 ): {
   days: number;
   hours: number;
@@ -148,14 +146,13 @@ export const getTimeDifference = (
   percentComplete: number;
   isToday: boolean;
 } => {
-  const target =
-    typeof targetDate === "string"
-      ? toZonedTime(parseISO(targetDate), timezone)
-      : toZonedTime(targetDate, timezone);
-  const base =
-    typeof baseDate === "string"
-      ? toZonedTime(parseISO(baseDate), timezone)
-      : toZonedTime(baseDate, timezone);
+  const toDate = (d: Date | string) =>
+    typeof d === "string"
+      ? toZonedTime(parseISO(d), timezone)
+      : toZonedTime(d, timezone);
+
+  const target = toDate(targetDate);
+  const base = toDate(baseDate);
 
   if (isBefore(target, base)) {
     return {
@@ -164,19 +161,24 @@ export const getTimeDifference = (
       minutes: 0,
       seconds: 0,
       totalSeconds: 0,
-      percentComplete: 100, // If target date is in the past, percentage is 100%
+      percentComplete: 100,
       isToday: false,
     };
   }
 
-  const days = differenceInDays(target, base);
-  const hours = differenceInHours(target, base) % 24;
-  const minutes = differenceInMinutes(target, base) % 60;
-  const seconds = differenceInSeconds(target, base) % 60;
   const totalSeconds = differenceInSeconds(target, base);
-  // Don't calculate percentComplete here, it will be calculated in the component
-  const percentComplete = 0;
-  const isToday = isSameDay(target, base);
+  const days = Math.floor(totalSeconds / (24 * 60 * 60));
+  const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+  const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+  const seconds = totalSeconds % 60;
+
+  let percentComplete = 0;
+  if (startDate) {
+    const start = toDate(startDate);
+    const fullRange = differenceInSeconds(target, start);
+    const elapsed = differenceInSeconds(base, start);
+    percentComplete = Math.min(Math.max((elapsed / fullRange) * 100, 0), 100);
+  }
 
   return {
     days,
@@ -185,7 +187,7 @@ export const getTimeDifference = (
     seconds,
     totalSeconds,
     percentComplete,
-    isToday,
+    isToday: isSameDay(target, base),
   };
 };
 

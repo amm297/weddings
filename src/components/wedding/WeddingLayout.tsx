@@ -43,17 +43,22 @@ export function WeddingLayout({
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div
+          id={`${id}-title-container`}
           className={cn(
             "max-w-6xl mx-auto",
-            hasSideImage && "md:text-left",
-            hasSideImage && imagePosition === "left" && "md:text-right",
-            hasSideImage && imagePosition === "right" && "md:text-left"
+            hasSideImage && "md:w-1/2",
+            hasSideImage &&
+              imagePosition === "left" &&
+              "md:ml-auto md:text-right",
+            hasSideImage &&
+              imagePosition === "right" &&
+              "md:mr-auto md:text-left"
           )}
         >
           <h2
             className={cn(
               "text-3xl md:text-5xl font-sectionHeadline uppercase tracking-wider mb-2",
-              "text-center md:text-left",
+              "text-center",
               !hasSideImage && "md:text-center",
               hasSideImage && imagePosition === "left" && "md:text-right",
               hasSideImage && imagePosition === "right" && "md:text-left",
@@ -67,7 +72,7 @@ export function WeddingLayout({
           {subtitle && (
             <p
               className={cn(
-                "text-center md:text-left",
+                "text-center",
                 !hasSideImage && "md:text-center",
                 hasSideImage && imagePosition === "left" && "md:text-right",
                 hasSideImage && imagePosition === "right" && "md:text-left",
@@ -84,7 +89,7 @@ export function WeddingLayout({
         <div
           id={`${id}-content`}
           className={cn(
-            "max-w-6xl mx-auto mt-8 relative flex",
+            "max-w-6xl mx-auto mt-6 relative flex",
             hasBackgroundImage && "text-white",
             hasSideImage && imagePosition === "left" && "md:justify-end",
             hasSideImage && imagePosition === "right" && "md:justify-start"
@@ -93,7 +98,13 @@ export function WeddingLayout({
           <div
             className={cn(
               "flex-1",
-              hasSideImage ? "w-full md:max-w-[50%] md:px-8" : "w-full"
+              hasSideImage &&
+                imagePosition === "left" &&
+                "md:max-w-[50%] md:px-4",
+              hasSideImage &&
+                imagePosition === "right" &&
+                "md:max-w-[50%] md:pl-0 md:pr-4",
+              !hasSideImage && "w-full"
             )}
           >
             {children}
