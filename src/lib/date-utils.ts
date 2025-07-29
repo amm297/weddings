@@ -79,21 +79,59 @@ export const serializeDate = (
     "nanoseconds" in date
   ) {
     const dateObj = toZonedTime(new Date(date.seconds * 1000), timezone);
-    return formatInTimeZone(dateObj, timezone, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
-      locale: DEFAULT_LOCALE,
-    });
+    return formatInTimeZone(dateObj, timezone, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
   }
 
   // Handle regular Date objects
   if (date instanceof Date) {
-    return formatInTimeZone(date, timezone, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
-      locale: DEFAULT_LOCALE,
-    });
+    return formatInTimeZone(date, timezone, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
   }
 
-  // If it's already a string, return as is
+  // If it's already a string, parse it correctly based on format
   if (typeof date === "string") {
-    return date;
+    try {
+      // Check if it's in DD/MM/YYYY HH:mm:ss format
+      if (date.includes("/") && date.includes(" ")) {
+        const [datePart, timePart] = date.split(" ");
+        const [day, month, year] = datePart.split("/");
+        const parsedDate = parse(
+          `${year}-${month}-${day}T${timePart}`,
+          "yyyy-MM-dd'T'HH:mm:ss",
+          new Date()
+        );
+        return formatInTimeZone(
+          parsedDate,
+          timezone,
+          "yyyy-MM-dd'T'HH:mm:ss"
+        );
+      }
+
+      // Check if it's in DD/MM/YYYYTHH:mm:ss format
+      if (date.includes("/") && date.includes("T")) {
+        const [datePart, timePart] = date.split("T");
+        const [day, month, year] = datePart.split("/");
+        const parsedDate = parse(
+          `${year}-${month}-${day}T${timePart}`,
+          "yyyy-MM-dd'T'HH:mm:ss",
+          new Date()
+        );
+        return formatInTimeZone(
+          parsedDate,
+          timezone,
+          "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        );
+      }
+
+      // Handle ISO format
+      return formatInTimeZone(
+        parseISO(date),
+        timezone,
+        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+      );
+    } catch (error) {
+      console.error("Error parsing date string:", date, error);
+      return "";
+    }
   }
 
   // Fallback

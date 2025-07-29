@@ -75,7 +75,7 @@ export interface SectionCTA {
 export interface CeremonySection extends Section {
   couple: Couple;
   location: Location;
-  date: Date;
+  date: Date | string;
   timezone: string;
   countdown?: boolean;
 }
@@ -125,7 +125,7 @@ export interface Timeline {
 }
 
 export interface RsvpSection extends Section {
-  deadline: Date;
+  deadline: Date | string;
   form?: string;
 }
 
@@ -136,9 +136,9 @@ export interface Contact {
 
 export interface Summary {
   couple: Couple;
-  date: Date;
-  ceremonyStart?: Date;
-  ceremonyEnd?: Date;
+  date: Date | string;
+  ceremonyStart?: Date | string;
+  ceremonyEnd?: Date | string;
   location?: Location;
   contact?: Contact;
 }

@@ -1,5 +1,5 @@
-import { Timestamp } from "firebase/firestore";
 import { toZonedTime } from "date-fns-tz";
+import { formatDate } from "@/lib/date-utils";
 
 // Default timezone for the application if not specified in the data
 const DEFAULT_TIMEZONE = "Europe/Madrid";
@@ -25,20 +25,38 @@ export function processDateFields(data: any): any {
       typeof value === "string" &&
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)
     ) {
+      console.log(key, value, timezone);
+
       // Convert ISO date strings to Firestore timestamps with timezone handling
       const zonedDate = toZonedTime(new Date(value), timezone);
-      result[key] = Timestamp.fromDate(zonedDate);
+      console.log("zonedDate", zonedDate);
+      // result[key] = Timestamp.fromDate(zonedDate);
+      result[key] = formatDate(zonedDate, "dd/MM/yyyy HH:mm:ss", {
+        timezone,
+      });
+      console.log("result[key]", result[key]);
     } else if (key === "date" && typeof value === "string") {
       // Special handling for date fields with timezone handling
       // For date-only strings, append the time component
       const dateString = value.includes("T") ? value : `${value}T00:00:00`;
+      console.log("dateString", dateString);
       const zonedDate = toZonedTime(new Date(dateString), timezone);
-      result[key] = Timestamp.fromDate(zonedDate);
+
+      console.log("zonedDate", zonedDate);
+      // result[key] = Timestamp.fromDate(zonedDate);
+      result[key] = formatDate(zonedDate, "dd/MM/yyyy HH:mm:ss", {
+        timezone,
+      });
+      console.log("result[key]", result[key]);
     } else if (key === "deadline" && typeof value === "string") {
       // Special handling for deadline fields with timezone handling
       const dateString = value.includes("T") ? value : `${value}T00:00:00`;
       const zonedDate = toZonedTime(new Date(dateString), timezone);
-      result[key] = Timestamp.fromDate(zonedDate);
+      // result[key] = Timestamp.fromDate(zonedDate);
+      result[key] = formatDate(zonedDate, "dd/MM/yyyy HH:mm:ss", {
+        timezone,
+      });
+      console.log("result[key]", result[key]);
     } else if (key === "timezone") {
       // Keep the timezone information
       result[key] = value;

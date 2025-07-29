@@ -19,7 +19,7 @@ export function ImageSide({ image, imagePosition, id }: ImageSideProps) {
       <img
         src={image}
         alt={`${id}-image-${imagePosition}`}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain"
       />
     </div>
   );

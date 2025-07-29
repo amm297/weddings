@@ -21,7 +21,12 @@ const defaultWeddingConfig: WeddingConfig = {
       person2: { name: "" },
     },
     date: new Date(),
-    location: "",
+    location: {
+      name: "",
+      address: "",
+      city: "",
+      country: "",
+    },
   },
   sections: [],
 };
