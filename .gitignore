@@ -57,3 +57,5 @@ bun.lockb
 wedding-data/
 wedding_data/
 .wedding-data.*
+
+public/

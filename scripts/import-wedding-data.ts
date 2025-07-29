@@ -11,6 +11,8 @@ import {
 import dotenv from "dotenv";
 import sharp from "sharp";
 import { processDateFields } from "./date-parser";
+import crypto from "crypto";
+import processImage from "./processos/image";
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -62,6 +64,15 @@ if (useEmulator) {
   console.log("Connected to Firestore emulator");
 }
 
+// Public images directory
+const PUBLIC_IMAGES_DIR = path.join(process.cwd(), "public", "images");
+
+// Ensure the images directory exists
+if (!fs.existsSync(PUBLIC_IMAGES_DIR)) {
+  fs.mkdirSync(PUBLIC_IMAGES_DIR, { recursive: true });
+  console.log(`Created directory: ${PUBLIC_IMAGES_DIR}`);
+}
+
 // Helper function to check if a string is a file path
 function isImagePath(str: string): boolean {
   if (typeof str !== "string") return false;
@@ -84,72 +95,42 @@ function isImagePath(str: string): boolean {
   return exists;
 }
 
-// Helper function to process an image and get its base64 string
-async function processImage(imagePath: string): Promise<string> {
-  try {
-    // Parse the image path and parameters
-    // Format: "path width height format"
-    const parts = imagePath.split(" ");
-    const filePath = parts[0];
-    const width = parts.length > 1 ? parseInt(parts[1], 10) : 0;
-    const height = parts.length > 2 ? parseInt(parts[2], 10) : 0;
-    const format = parts.length > 3 ? parts[3] : "webp";
-    const quality = 80; // Default quality
+// Helper function to generate a unique filename
+function generateUniqueFilename(
+  originalPath: string,
+  format: string,
+  weddingId?: string
+): string {
+  const hash = crypto
+    .createHash("md5")
+    .update(originalPath + Date.now().toString())
+    .digest("hex")
+    .substring(0, 8);
 
-    // Resolve the image path if it's relative
-    const resolvedPath = fs.existsSync(filePath)
-      ? filePath
-      : path.join(process.cwd(), filePath);
+  const originalFilename = path.basename(originalPath.split(" ")[0]);
+  const nameWithoutExt = originalFilename.substring(
+    0,
+    originalFilename.lastIndexOf(".")
+  );
 
-    console.log(
-      `Processing image: ${resolvedPath} (${width}x${height}, ${format})`
-    );
+  // Create the directory path for the image, organized by wedding ID if provided
+  const imageDir = weddingId
+    ? path.join(PUBLIC_IMAGES_DIR, weddingId)
+    : PUBLIC_IMAGES_DIR;
 
-    // Process the image directly using Sharp
-    let sharpInstance = sharp(resolvedPath);
-
-    // Resize if dimensions are provided
-    if (width > 0 || height > 0) {
-      sharpInstance = sharpInstance.resize(width || null, height || null, {
-        fit: "inside",
-        withoutEnlargement: true,
-      });
-    }
-
-    // Apply format-specific optimizations
-    switch (format.toLowerCase()) {
-      case "webp":
-        sharpInstance = sharpInstance.webp({ quality });
-        break;
-      case "jpeg":
-      case "jpg":
-        sharpInstance = sharpInstance.jpeg({ quality, mozjpeg: true });
-        break;
-      case "png":
-        sharpInstance = sharpInstance.png({ quality, compressionLevel: 9 });
-        break;
-      case "avif":
-        sharpInstance = sharpInstance.avif({ quality });
-        break;
-      default:
-        sharpInstance = sharpInstance.webp({ quality });
-    }
-
-    // Convert to base64
-    const buffer = await sharpInstance.toBuffer();
-    const base64Image = `data:image/${format};base64,${buffer.toString(
-      "base64"
-    )}`;
-
-    return base64Image;
-  } catch (error) {
-    console.error(`Error processing image ${imagePath}:`, error);
-    return imagePath; // Return the original path if processing fails
+  if (!fs.existsSync(imageDir)) {
+    fs.mkdirSync(imageDir, { recursive: true });
   }
+
+  // Generate the filename for storage
+  const filename = `${nameWithoutExt}-${hash}.${format}`;
+
+  // Return the URL path that will be used in the app (relative to public)
+  return weddingId ? `/images/${weddingId}/${filename}` : `/images/${filename}`;
 }
 
 // Helper function to process image paths in the wedding data
-async function processImagePaths(data: any): Promise<any> {
+async function processImagePaths(data: any, weddingId: string): Promise<any> {
   if (!data || typeof data !== "object") {
     return data;
   }
@@ -158,7 +139,7 @@ async function processImagePaths(data: any): Promise<any> {
   if (Array.isArray(data)) {
     const results = [];
     for (const item of data) {
-      results.push(await processImagePaths(item));
+      results.push(await processImagePaths(item, weddingId));
     }
     return results;
   }
@@ -167,12 +148,39 @@ async function processImagePaths(data: any): Promise<any> {
   const result: any = {};
   for (const [key, value] of Object.entries(data)) {
     if (typeof value === "string" && isImagePath(value)) {
-      // Process image path to base64
+      // Process image path and get public URL
       console.log(`Found image path in field "${key}": ${value}`);
-      result[key] = await processImage(value);
+
+      // Format: "path width height format"
+      const parts = value.split(" ");
+      const filePath = parts[0];
+      const width = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+      const height = parts.length > 2 ? parseInt(parts[2], 10) : 0;
+      const format = parts.length > 3 ? parts[3] : "webp";
+      const quality = 100; // Default quality
+
+      // Generate the URL path for Firestore
+      const urlPath = generateUniqueFilename(filePath, format, weddingId);
+
+      // Create the full filesystem path for the image
+      const outputFilePath = path.join(process.cwd(), "public", urlPath);
+
+      // Process the image and store the URL
+      await processImage(filePath, {
+        outputPath: outputFilePath,
+        width,
+        height,
+        quality,
+        format,
+        preserveAspectRatio: true,
+        preserveResolution: false,
+      });
+
+      // Store the URL path in the result
+      result[key] = urlPath;
     } else if (typeof value === "object") {
       // Recursively process nested objects
-      result[key] = await processImagePaths(value);
+      result[key] = await processImagePaths(value, weddingId);
     } else {
       // Keep other values as is
       result[key] = value;
@@ -204,9 +212,16 @@ async function importWeddingData() {
     // Process dates in the wedding data
     const dataWithDates = processDateFields(weddingData);
 
+    // Get the document ID or use the slug as ID
+    const docId = dataWithDates.id || dataWithDates.slug;
+
+    if (!docId) {
+      throw new Error("Wedding data must have an id or slug field");
+    }
+
     // Process image paths in the wedding data
     console.log("Processing image paths...");
-    const processedData = await processImagePaths(dataWithDates);
+    const processedData = await processImagePaths(dataWithDates, docId);
 
     // Add timestamps
     const timestamp = Timestamp.now();
@@ -216,16 +231,10 @@ async function importWeddingData() {
       updatedAt: timestamp,
     };
 
-    // Get the document ID or use the slug as ID
-    const docId = processedData.id || processedData.slug;
-
-    if (!docId) {
-      throw new Error("Wedding data must have an id or slug field");
-    }
-
     // Import the data to Firestore
     await setDoc(doc(db, "weddings", docId), dataWithTimestamps);
     console.log(`Successfully imported wedding data with ID: ${docId}`);
+    console.log(`Images processed and saved to: public/images/${docId}/`);
 
     process.exit(0);
   } catch (error) {

@@ -86,7 +86,7 @@ export interface FAQSection extends Section {
 
 export interface FAQ {
   question: string;
-  answer: string;
+  answer: string | string[];
 }
 
 export interface HotelSection extends Section {

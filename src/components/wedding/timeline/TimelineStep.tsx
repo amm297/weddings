@@ -15,8 +15,8 @@ export const TimelineStep = ({
 
   const renderImage = () => {
     return (
-      <div className={cn()}>
-        <img src={image} alt={text} className="object-contain scale-125 md:scale-100" />
+      <div className={cn("w-full max-w-[120px] md:max-w-none")}>
+        <img src={image} alt={text} className="w-full h-auto object-contain" />
       </div>
     );
   };

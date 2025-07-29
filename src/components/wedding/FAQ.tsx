@@ -32,7 +32,15 @@ export function FAQ({ isEven }: { isEven: boolean }) {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-foreground/80">
-                {faq.answer}
+                {Array.isArray(faq.answer) ? (
+                  <div className="flex flex-col gap-2">
+                    {faq.answer.map((item, index) => (
+                      <p key={index}>{item}</p>
+                    ))}
+                  </div>
+                ) : (
+                  <p>{faq.answer}</p>
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}
