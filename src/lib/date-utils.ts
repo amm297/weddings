@@ -99,11 +99,7 @@ export const serializeDate = (
           "yyyy-MM-dd'T'HH:mm:ss",
           new Date()
         );
-        return formatInTimeZone(
-          parsedDate,
-          timezone,
-          "yyyy-MM-dd'T'HH:mm:ss"
-        );
+        return formatInTimeZone(parsedDate, timezone, "yyyy-MM-dd'T'HH:mm:ss");
       }
 
       // Check if it's in DD/MM/YYYYTHH:mm:ss format
@@ -302,11 +298,34 @@ export const isDatePassed = (
   timezone: string = DEFAULT_TIMEZONE
 ): boolean => {
   if (!date) return false;
-  const dateObj =
-    typeof date === "string"
-      ? toZonedTime(parseISO(date), timezone)
-      : toZonedTime(date, timezone);
+
+  let dateObj;
+  if (typeof date === "string") {
+    // Check if it's in DD/MM/YYYY HH:MM:SS format
+    if (date.includes("/") && date.includes(":")) {
+      try {
+        const [datePart, timePart] = date.split(" ");
+        const [day, month, year] = datePart.split("/");
+        dateObj = parse(
+          `${year}-${month}-${day}T${timePart}`,
+          "yyyy-MM-dd'T'HH:mm:ss",
+          new Date()
+        );
+        dateObj = toZonedTime(dateObj, timezone);
+      } catch (error) {
+        console.error("Error parsing date:", date, error);
+        return false;
+      }
+    } else {
+      // Default ISO parsing
+      dateObj = toZonedTime(parseISO(date), timezone);
+    }
+  } else {
+    dateObj = toZonedTime(date, timezone);
+  }
+
   const now = toZonedTime(new Date(), timezone);
+
   return isAfter(now, dateObj);
 };
 

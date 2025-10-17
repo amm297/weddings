@@ -4,9 +4,10 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import Link from "next/link";
 import { TimerClean } from "../countdown/TimerClean";
+import { isDatePassed } from "@/lib/date-utils";
 
 export function Ceremony({ section }: { section: CeremonySection }) {
-  const { couple, date, countdown } = section;
+  const { couple, date, countdown, rsvpDeadline } = section;
 
   return (
     <div>
@@ -31,19 +32,21 @@ export function Ceremony({ section }: { section: CeremonySection }) {
           <TimerClean />
         </div>
       )}
-      <div className="mt-10 flex flex-wrap gap-4 justify-center">
-        <Button
-          variant="default"
-          size="lg"
-          asChild
-          className={cn(
-            "font-headline tracking-wide",
-            "hover:bg-primary/90 transition-all"
-          )}
-        >
-          <Link href={`#rsvp`}>Confirmar Asistencia</Link>
-        </Button>
-      </div>
+      {rsvpDeadline && !isDatePassed(rsvpDeadline) && (
+        <div className="mt-10 flex flex-wrap gap-4 justify-center">
+          <Button
+            variant="default"
+            size="lg"
+            asChild
+            className={cn(
+              "font-headline tracking-wide",
+              "hover:bg-primary/90 transition-all"
+            )}
+          >
+            <Link href={`#rsvp`}>Confirmar Asistencia</Link>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

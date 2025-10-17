@@ -78,6 +78,7 @@ export interface CeremonySection extends Section {
   date: Date | string;
   timezone: string;
   countdown?: boolean;
+  rsvpDeadline?: Date | string;
 }
 
 export interface FAQSection extends Section {
@@ -127,6 +128,7 @@ export interface Timeline {
 export interface RsvpSection extends Section {
   deadline: Date | string;
   form?: string;
+  expiredMessage?: string;
 }
 
 export interface Contact {
@@ -139,6 +141,7 @@ export interface Summary {
   date: Date | string;
   ceremonyStart?: Date | string;
   ceremonyEnd?: Date | string;
+  rsvpDeadline?: Date | string;
   location?: Location;
   contact?: Contact;
 }
