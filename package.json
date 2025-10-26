@@ -9,7 +9,7 @@
     "start": "bun run next start",
     "lint": "bun run next lint",
     "typecheck": "bun run tsc --noEmit",
-    " ": "firebase emulators:start --import=./.firebase-data --export-on-exit",
+    "firebase:emulators": "firebase emulators:start --import=./.firebase-data --export-on-exit",
     "dev:firebase": "concurrently \"bun run firebase:emulators\" \"bun run dev\"",
     "deploy": "bun run build && firebase deploy --only hosting",
     "import:wedding-data": "bun run scripts/import-wedding-data.ts",
