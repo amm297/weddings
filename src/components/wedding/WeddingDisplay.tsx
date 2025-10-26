@@ -10,6 +10,7 @@ import { Section } from "@/db";
 import { RSVP } from "./Rsvp";
 import { DefaultSection } from "./DefaultSection";
 import { CountdownTimer } from "./CountdownTimer";
+import { Transport } from "./Transport";
 
 export function WeddingDisplay() {
   const config = useWeddingConfig();
@@ -33,6 +34,8 @@ export function WeddingDisplay() {
         return <BankAccount isEven={isEven} />;
       case "rsvp":
         return <RSVP isEven={isEven} />;
+      case "transport":
+        return <Transport isEven={isEven} />;
       default:
         return <></>;
     }

@@ -49,7 +49,8 @@ export interface Section {
     | "hotel"
     | "bankaccount"
     | "countdown"
-    | "rsvp";
+    | "rsvp"
+    | "transport";
   title?: string;
   subtitle?: string;
   description?: string | string[];
@@ -141,6 +142,19 @@ export interface Summary {
   ceremonyEnd?: Date | string;
   location?: Location;
   contact?: Contact;
+}
+
+export interface TransportSection extends Section {
+  fromLocations: TransportLocation[];
+  toLocations: TransportLocation[];
+}
+
+export interface TransportLocation {
+  name: string;
+  time?: string;
+  stop?: string;
+  gmaps?: string;
+  route?: TransportLocation[];
 }
 
 export interface WeddingConfig {
