@@ -153,6 +153,7 @@ export interface TransportLocation {
   name: string;
   time?: string;
   stop?: string;
+  stopHint?: string;
   gmaps?: string;
   route?: TransportLocation[];
 }
