@@ -53,18 +53,24 @@ export interface Section {
     | "transport";
   title?: string;
   subtitle?: string;
-  description?: string | string[];
+  description?: string | string[] | DescriptionItem;
   icon?: string;
   cta?: SectionCTA;
   style?: SectionStyle;
 }
 
+export interface DescriptionItem {
+  text: string;
+  itemStyle?: string;
+}
 export interface SectionStyle {
   texture?: string;
   image?: string;
   overlay?: boolean;
   imagePosition?: "left" | "right" | "background";
   noRepeat?: boolean;
+  minHeight?: number | string;
+  textAlign?: string;
 }
 
 export interface SectionCTA {
@@ -116,6 +122,7 @@ export interface BankAccount {
 
 export interface TimelineSection extends Section {
   transitionImage: string;
+  rotateDegrees?: number;
   timeline: Timeline[];
 }
 export interface Timeline {
@@ -137,6 +144,7 @@ export interface Contact {
 
 export interface Summary {
   couple: Couple;
+  previewImage?: string;
   date: Date | string;
   ceremonyStart?: Date | string;
   ceremonyEnd?: Date | string;

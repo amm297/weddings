@@ -11,6 +11,7 @@ import { RSVP } from "./Rsvp";
 import { DefaultSection } from "./DefaultSection";
 import { CountdownTimer } from "./CountdownTimer";
 import { Transport } from "./Transport";
+import { ImageSection } from "./ImageSection";
 
 export function WeddingDisplay() {
   const config = useWeddingConfig();
@@ -36,6 +37,8 @@ export function WeddingDisplay() {
         return <RSVP isEven={isEven} />;
       case "transport":
         return <Transport isEven={isEven} />;
+      case "image":
+        return <ImageSection id={section.id} isEven={isEven} />;
       default:
         return <></>;
     }
@@ -45,7 +48,7 @@ export function WeddingDisplay() {
     <div>
       {sections?.map((section, index) => (
         <Fragment key={index}>
-          {renderSection(section, index % 2 === 0)}
+          {renderSection(section, !(index % 2 === 0))}
         </Fragment>
       ))}
     </div>

@@ -7,7 +7,7 @@ import TimelineLayout from "./timeline/TimelineLayout";
 
 export function Timeline({ isEven }: { isEven: boolean }) {
   const section = useWeddingSection("timeline") as TimelineSection;
-  const { title, subtitle, timeline, transitionImage } = section;
+  const { title, subtitle, timeline, transitionImage, rotateDegrees } = section;
 
   if (!title || !timeline?.length) return null;
 
@@ -18,7 +18,11 @@ export function Timeline({ isEven }: { isEven: boolean }) {
       subtitle={subtitle}
       isEven={isEven}
     >
-      <TimelineLayout timeline={timeline} transitionImage={transitionImage} />
+      <TimelineLayout
+        timeline={timeline}
+        transitionImage={transitionImage}
+        rotateDegrees={rotateDegrees ?? 35}
+      />
     </WeddingLayout>
   );
 }

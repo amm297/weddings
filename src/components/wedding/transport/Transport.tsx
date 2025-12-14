@@ -55,28 +55,27 @@ export function Transport({ section }: { section: TransportSection }) {
           gap-10
           flex-row 
           max-sm:flex-col"
-
-        //   items-start
-        //   p-2
-        //   max-sm:items-center
-        //   max-sm:gap-2
       >
-        <div className="flex-1">
-          <p className="text-xl">Ida</p>
-          {fromLocations.map((location, index) =>
-            renderLocation(location, `from-${index}`, index + 1)
-          )}
-        </div>
-        <div className="flex-1">
-          <p className="text-xl">Vuelta</p>
-          {toLocations.map((location, index) =>
-            renderLocation(
-              location,
-              `to-${index}`,
-              `${index + 1} - ${location.time}`
-            )
-          )}
-        </div>
+        {fromLocations?.length > 0 && (
+          <div className="flex-1">
+            <p className="text-xl">Ida</p>
+            {fromLocations?.map((location, index) =>
+              renderLocation(location, `from-${index}`, index + 1)
+            )}
+          </div>
+        )}
+        {toLocations?.length > 0 && (
+          <div className="flex-1">
+            <p className="text-xl">Vuelta</p>
+            {toLocations?.map((location, index) =>
+              renderLocation(
+                location,
+                `to-${index}`,
+                `${index + 1} - ${location.time}`
+              )
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

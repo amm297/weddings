@@ -35,8 +35,14 @@ export function WeddingLayout({
       id={id}
       className={cn(
         "py-12 md:py-20 relative scroll-mt-20 overflow-hidden",
-        isEven ? "bg-background" : "bg-primary/10"
+        isEven ? "bg-background" : "bg-primary/10",
+        sectionStyle?.textAlign && `text-${sectionStyle.textAlign}`
       )}
+      style={
+        sectionStyle?.minHeight
+          ? { minHeight: sectionStyle.minHeight }
+          : undefined
+      }
     >
       <ImageBackground {...(sectionStyle ?? {})} />
       <ImageSide id={id} {...(sectionStyle ?? {})} />

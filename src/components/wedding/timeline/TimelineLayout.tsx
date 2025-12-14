@@ -3,11 +3,13 @@ import { TimelineStep } from "./TimelineStep";
 import { cn } from "@/lib/utils";
 
 export default function TimelineLayout({
+  rotateDegrees,
   timeline,
   transitionImage,
 }: {
   timeline: Timeline[];
   transitionImage?: string;
+  rotateDegrees?: number;
 }) {
   const w = 1 / timeline.length;
   return (
@@ -27,7 +29,9 @@ export default function TimelineLayout({
               alt={`transition-${step.text?.toLowerCase()}`}
               className={cn(
                 "w-20 h-20 z-20 scale-110",
-                index % 2 == 0 ? "rotate-[-35deg]" : "rotate-[35deg]"
+                index % 2 == 0
+                  ? `rotate-[-${rotateDegrees}deg]`
+                  : `rotate-[${rotateDegrees}deg]`
               )}
             />
           )}
