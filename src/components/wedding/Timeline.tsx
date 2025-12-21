@@ -4,8 +4,9 @@ import { useWeddingSection } from "@/hooks/use-wedding-section";
 import { WeddingLayout } from "./WeddingLayout";
 import { TimelineSection } from "@/db/wedding-model";
 import TimelineLayout from "./timeline/TimelineLayout";
+import TimelineLayoutV2 from "./timeline/TimelineLayoutV2";
 
-export function Timeline({ isEven }: { isEven: boolean }) {
+export function Timeline({ isEven, v2 }: { isEven: boolean; v2?: boolean }) {
   const section = useWeddingSection("timeline") as TimelineSection;
   const { title, subtitle, timeline, transitionImage, rotateDegrees } = section;
 
@@ -18,11 +19,19 @@ export function Timeline({ isEven }: { isEven: boolean }) {
       subtitle={subtitle}
       isEven={isEven}
     >
-      <TimelineLayout
-        timeline={timeline}
-        transitionImage={transitionImage}
-        rotateDegrees={rotateDegrees ?? 35}
-      />
+      {v2 ? (
+        <TimelineLayoutV2
+          timeline={timeline}
+          transitionImage={transitionImage}
+          rotateDegrees={rotateDegrees ?? 35}
+        />
+      ) : (
+        <TimelineLayout
+          timeline={timeline}
+          transitionImage={transitionImage}
+          rotateDegrees={rotateDegrees ?? 35}
+        />
+      )}
     </WeddingLayout>
   );
 }

@@ -45,11 +45,15 @@ export interface Section {
     | "main"
     | "default"
     | "timeline"
+    | "timelinev2"
     | "faq"
     | "hotel"
     | "bankaccount"
     | "countdown"
     | "rsvp"
+    | "info"
+    | "sides"
+    | "image"
     | "transport";
   title?: string;
   subtitle?: string;

@@ -31,6 +31,8 @@ export function WeddingDisplay() {
         return <CountdownTimer isEven={isEven} />;
       case "timeline":
         return <Timeline isEven={isEven} />;
+      case "timelinev2":
+        return <Timeline isEven={isEven} v2 />;
       case "faq":
         return <FAQ isEven={isEven} />;
       case "hotel":
