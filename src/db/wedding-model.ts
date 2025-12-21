@@ -55,7 +55,7 @@ export interface Section {
   subtitle?: string;
   description?: string | string[] | DescriptionItem;
   icon?: string;
-  cta?: SectionCTA;
+  cta?: SectionCTA | SectionCTA[];
   style?: SectionStyle;
 }
 

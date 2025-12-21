@@ -2,7 +2,7 @@
 
 import { WeddingLayout } from "./WeddingLayout";
 import { useWeddingSection } from "@/hooks/use-wedding-section";
-import { Section, DescriptionItem } from "@/db/wedding-model";
+import { Section, DescriptionItem, SectionCTA } from "@/db/wedding-model";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -41,24 +41,30 @@ export function Info({ isEven, id }: { isEven: boolean; id: string }) {
     }
   };
 
+  const renderCTAItem = (item: SectionCTA, index: number) => {
+    console.log("CTA", item);
+    return (
+      <Button key={`cta-${index}`} variant="default" asChild>
+        <Link href={item.link} target={item.target}>
+          {item.text}
+        </Link>
+      </Button>
+    );
+  };
+  const renderCTA = () => {
+    if (!cta) return <></>;
+
+    if (Array.isArray(cta)) {
+      return cta.map((item, index) => renderCTAItem(item, index));
+    }
+    return renderCTAItem(cta as SectionCTA, 0);
+  };
   return (
-    <WeddingLayout
-      id={id}
-      title={title}
-      isEven={isEven}
-      sectionStyle={style}
-      icon={icon}
-    >
+    <WeddingLayout id={id} isEven={isEven} sectionStyle={style} icon={icon}>
       <div className="max-w-2xl mx-auto">{renderDescription()}</div>
-      {cta && (
-        <div className="flex justify-center">
-          <Button variant="default" size="lg" asChild>
-            <Link href={cta.link} target={cta.target}>
-              {cta.text}
-            </Link>
-          </Button>
-        </div>
-      )}
+      <div className="flex flex-col md:flex-row justify-center gap-4">
+        {renderCTA()}
+      </div>
     </WeddingLayout>
   );
 }

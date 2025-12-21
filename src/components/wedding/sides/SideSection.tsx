@@ -38,17 +38,16 @@ export function SideSection({ section }: { section: SideSectionItem }) {
   return (
     <div
       id={`${id}-side`}
-      className="flex flex-1 flex-col items-center justify-center gap-4"
+      className="flex flex-1 flex-col items-center justify-center gap-4 w-full"
     >
       {title && <h2 className="text-2xl font-bold ">{title}</h2>}
       {description && renderDescription()}
       {cta && (
-        <div className=" flex flex-wrap  justify-center">
+        <div className="flex flex-wrap justify-center w-full md:w-auto px-4 md:px-0">
           <Button
             variant="default"
-            size="lg"
             asChild
-            className={cn("font-headline tracking-wide ")}
+            className={cn("font-headline tracking-wide w-full md:w-auto")}
           >
             <Link href={cta.link} target={cta.target}>
               {cta.text}
