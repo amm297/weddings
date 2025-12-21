@@ -6,13 +6,22 @@ import Link from "next/link";
 import { TimerClean } from "../countdown/TimerClean";
 
 export function Ceremony({ section }: { section: CeremonySection }) {
-  const { couple, date, countdown } = section;
+  const { couple, date, countdown, dateFormat, innerTitle, innerSubtitle } =
+    section;
 
   return (
     <div>
-      <p className="font-sectionHeadline text-center text-lg md:text-xl text-foreground/80 mb-4 tracking-widest">
-        ¡Nos Casamos!
-      </p>
+      {innerTitle && (
+        <p className="text-center text-lg md:text-xl text-foreground/80 mb-4 tracking-widest">
+          {innerTitle}
+        </p>
+      )}
+      {innerSubtitle && (
+        <p className="  text-center text-lg md:text-xl text-foreground/80 mb-4 tracking-widest">
+          {innerSubtitle}
+        </p>
+      )}
+
       <h1 className="font-sageffine text-5xl md:text-7xl">
         <div className="flex md:justify-center items-center md:flex-row flex-col">
           <span className="flex-1 md:text-right text-center md:pr-4">
@@ -26,7 +35,7 @@ export function Ceremony({ section }: { section: CeremonySection }) {
       </h1>
       <div className="mt-8 flex items-center justify-center gap-4 text-foreground/90">
         <p className="font-pinyon text-2xl md:text-4xl">
-          {formatDate(date, "dd.MM.yyyy")}
+          {formatDate(date, dateFormat ?? "dd.MM.yyyy")}
         </p>
       </div>
 

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "bun:dev": "bunx --bun next dev -p 9002",
-    "build": "bun run next build",
+    "build": "bun run next build && cp -r wedding_data out/wedding_data",
     "start": "bun run next start",
     "lint": "bun run next lint",
     "typecheck": "bun run tsc --noEmit",

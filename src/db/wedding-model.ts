@@ -85,6 +85,9 @@ export interface CeremonySection extends Section {
   date: Date | string;
   timezone: string;
   countdown?: boolean;
+  dateFormat?: string;
+  innerTitle?: string;
+  innerSubtitle?: string;
 }
 
 export interface FAQSection extends Section {

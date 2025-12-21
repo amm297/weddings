@@ -43,11 +43,15 @@ export async function generateMetadata({
     }
 
     // Get preview image and make it absolute
-    const previewImage = summary?.previewImage;
-    const absoluteImageUrl = previewImage
-      ? previewImage.startsWith("http")
-        ? previewImage
-        : `https://wedding-page-4te30.web.app${previewImage}`
+    // Extract just the path from image metadata format like "path/to/image.png 1200 630 webp"
+    const previewImageRaw = summary?.previewImage;
+    const previewImagePath = previewImageRaw?.split(" ")[0]; // Extract just the path
+    const absoluteImageUrl = previewImagePath
+      ? previewImagePath.startsWith("http")
+        ? previewImagePath
+        : `https://wedding-page-4te30.web.app${
+            previewImagePath.startsWith("/") ? "" : "/"
+          }${previewImagePath}`
       : null;
 
     const pageUrl = `https://wedding-page-4te30.web.app/${slug}`;
