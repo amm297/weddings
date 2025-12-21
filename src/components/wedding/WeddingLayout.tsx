@@ -10,6 +10,7 @@ export interface WeddingLayoutProps {
   title?: string;
   subtitle?: string;
   sectionStyle?: SectionStyle;
+  icon?: string;
 }
 
 export function WeddingLayout({
@@ -19,7 +20,9 @@ export function WeddingLayout({
   title,
   subtitle,
   sectionStyle,
+  icon,
 }: WeddingLayoutProps) {
+  console.log(icon);
   const hasBackgroundImage =
     Boolean(sectionStyle?.image) &&
     sectionStyle?.imagePosition === "background";
@@ -113,6 +116,11 @@ export function WeddingLayout({
               !hasSideImage && "w-full"
             )}
           >
+            {icon && (
+              <div className="flex justify-center items-center mb-4">
+                <img src={icon} alt={icon} className="w-15 h-15" />
+              </div>
+            )}
             {children}
           </div>
         </div>

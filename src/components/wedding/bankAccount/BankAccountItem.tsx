@@ -32,7 +32,7 @@ export const BankAccountItem = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="font-mono tracking-wider">
+      <p className="font-mono tracking-wider text-center text-primary italic">
         {formatAccountNumber(accountNumber)}
       </p>
     </div>
