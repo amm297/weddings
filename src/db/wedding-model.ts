@@ -76,6 +76,16 @@ export interface SectionStyle {
   textAlign?: string;
 }
 
+export interface SideSection extends Section {
+  sections?: SideSectionItem[];
+}
+export interface SideSectionItem {
+  id?: string;
+  title?: string;
+  description?: string | string[] | DescriptionItem;
+  cta?: SectionCTA;
+}
+
 export interface SectionCTA {
   text: string;
   link: string;

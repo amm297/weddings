@@ -42,6 +42,8 @@ export function WeddingDisplay() {
         return <Transport isEven={isEven} />;
       case "image":
         return <ImageSection id={section.id} isEven={isEven} />;
+      case "sides":
+        return <Sides isEven={isEven} />;
       default:
         return <></>;
     }
@@ -52,7 +54,6 @@ export function WeddingDisplay() {
       {sections?.map((section, index) => (
         <Fragment key={index}>
           {renderSection(section, !(index % 2 === 0))}
-          <Sides isEven={!(index % 2 === 0)} />
         </Fragment>
       ))}
     </div>
