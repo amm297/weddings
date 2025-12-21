@@ -20,6 +20,8 @@ export function WeddingDisplay() {
   const renderSection = (section: Section, isEven: boolean) => {
     if (!section) return null;
 
+    console.log(section);
+
     switch (section?.layout?.toLowerCase()) {
       case "default":
         return <DefaultSection id={section.id} isEven={isEven} />;

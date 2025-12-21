@@ -20,6 +20,47 @@ import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 export const DEFAULT_LOCALE = es;
 export const DEFAULT_TIMEZONE = "Europe/Madrid";
 
+// export const parseDate = (
+//   date: string | undefined | Date | { seconds: number; nanoseconds: number },
+//   format?: string,
+//   timezone: string = DEFAULT_TIMEZONE
+// ): Date => {
+//   if (!date) return new Date();
+
+//   // If it's already a Date object, return it
+//   if (date instanceof Date) {
+//     return date;
+//   }
+
+//   // If it's a string
+//   if (typeof date === "string") {
+//     // Check if it looks like an ISO date (contains T and Z)
+//     if (date.includes("T") && (date.includes("Z") || date.includes("+"))) {
+//       // Parse ISO date and convert to the specified timezone
+//       return toZonedTime(parseISO(date), timezone);
+//     }
+
+//     // If format is provided, use parse and convert to the specified timezone
+//     if (format) {
+//       const parsedDate = parse(date, format, new Date(), {
+//         locale: DEFAULT_LOCALE,
+//       });
+//       return toZonedTime(parsedDate, timezone);
+//     }
+
+//     // Default to parseISO for other string formats and convert to the specified timezone
+//     return toZonedTime(parseISO(date), timezone);
+//   }
+
+//   // Handle Firebase Timestamp
+//   if (typeof date === "object" && "seconds" in date && "nanoseconds" in date) {
+//     return toZonedTime(new Date(date.seconds * 1000), timezone);
+//   }
+
+//   // Fallback
+//   return toZonedTime(new Date(), timezone);
+// };
+
 export const parseDate = (
   date: string | undefined | Date | { seconds: number; nanoseconds: number },
   format?: string,
@@ -34,6 +75,32 @@ export const parseDate = (
 
   // If it's a string
   if (typeof date === "string") {
+    // Check if it's in DD/MM/YYYY HH:mm:ss format (from Firestore)
+    if (date.includes("/") && date.includes(" ")) {
+      const [datePart, timePart] = date.split(" ");
+      const [day, month, year] = datePart.split("/");
+      const parsedDate = parse(
+        `${year}-${month}-${day} ${timePart}`,
+        "yyyy-MM-dd HH:mm:ss",
+        new Date(),
+        { locale: DEFAULT_LOCALE }
+      );
+      return toZonedTime(parsedDate, timezone);
+    }
+
+    // Check if it's in DD/MM/YYYYTHH:mm:ss format
+    if (date.includes("/") && date.includes("T")) {
+      const [datePart, timePart] = date.split("T");
+      const [day, month, year] = datePart.split("/");
+      const parsedDate = parse(
+        `${year}-${month}-${day}T${timePart}`,
+        "yyyy-MM-dd'T'HH:mm:ss",
+        new Date(),
+        { locale: DEFAULT_LOCALE }
+      );
+      return toZonedTime(parsedDate, timezone);
+    }
+
     // Check if it looks like an ISO date (contains T and Z)
     if (date.includes("T") && (date.includes("Z") || date.includes("+"))) {
       // Parse ISO date and convert to the specified timezone
@@ -99,11 +166,7 @@ export const serializeDate = (
           "yyyy-MM-dd'T'HH:mm:ss",
           new Date()
         );
-        return formatInTimeZone(
-          parsedDate,
-          timezone,
-          "yyyy-MM-dd'T'HH:mm:ss"
-        );
+        return formatInTimeZone(parsedDate, timezone, "yyyy-MM-dd'T'HH:mm:ss");
       }
 
       // Check if it's in DD/MM/YYYYTHH:mm:ss format
@@ -141,15 +204,31 @@ export const serializeDate = (
 /**
  * Format a date with the specified format string
  */
+// export const formatDate = (
+//   date: Date | string | number,
+//   formatStr: string,
+//   options?: { locale?: Locale; timezone?: string }
+// ): string => {
+//   const timezone = options?.timezone || DEFAULT_TIMEZONE;
+//   const dateObj = typeof date === "string" ? parseISO(date) : date;
+//   const zonedDate = toZonedTime(dateObj, timezone);
+//   return formatInTimeZone(zonedDate, timezone, formatStr, {
+//     locale: DEFAULT_LOCALE,
+//     ...options,
+//   });
+// };
+
 export const formatDate = (
   date: Date | string | number,
   formatStr: string,
   options?: { locale?: Locale; timezone?: string }
 ): string => {
   const timezone = options?.timezone || DEFAULT_TIMEZONE;
-  const dateObj = typeof date === "string" ? parseISO(date) : date;
-  const zonedDate = toZonedTime(dateObj, timezone);
-  return formatInTimeZone(zonedDate, timezone, formatStr, {
+  const dateObj =
+    typeof date === "string"
+      ? parseDate(date, undefined, timezone)
+      : toZonedTime(date, timezone);
+  return formatInTimeZone(dateObj, timezone, formatStr, {
     locale: DEFAULT_LOCALE,
     ...options,
   });

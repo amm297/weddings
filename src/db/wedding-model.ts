@@ -60,8 +60,11 @@ export interface Section {
 }
 
 export interface DescriptionItem {
-  text: string;
+  text?: string;
+  date?: Date | string;
   itemStyle?: string;
+  dateFormat?: string;
+  timezone?: string;
 }
 export interface SectionStyle {
   texture?: string;
@@ -97,6 +100,10 @@ export interface FAQSection extends Section {
 export interface FAQ {
   question: string;
   answer: string | string[];
+}
+
+export interface ImageSection extends Section {
+  image: string;
 }
 
 export interface HotelSection extends Section {
