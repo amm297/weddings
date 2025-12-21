@@ -13,6 +13,7 @@ import { CountdownTimer } from "./CountdownTimer";
 import { Transport } from "./Transport";
 import { ImageSection } from "./ImageSection";
 import { Sides } from "./Sides";
+import { Info } from "./Info";
 
 export function WeddingDisplay() {
   const config = useWeddingConfig();
@@ -44,6 +45,8 @@ export function WeddingDisplay() {
         return <ImageSection id={section.id} isEven={isEven} />;
       case "sides":
         return <Sides isEven={isEven} />;
+      case "info":
+        return <Info isEven={isEven} id={section.id} />;
       default:
         return <></>;
     }
