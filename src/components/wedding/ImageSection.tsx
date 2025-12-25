@@ -22,8 +22,6 @@ export function ImageSection({ id, isEven }: { id: string; isEven: boolean }) {
     }
 
     if (typeof item === "object" && item?.dateFormat && item?.date) {
-      console.log("DATE", item?.date, item?.dateFormat, item?.timezone);
-
       return (
         <p key={`ba-desc-${index}`}>
           {formatDate(item?.date, item?.dateFormat, {

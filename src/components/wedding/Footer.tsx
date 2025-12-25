@@ -31,8 +31,6 @@ export function Footer() {
     const start = formatForGoogleCalendar(startDate);
     const end = formatForGoogleCalendar(endDate);
 
-    console.log("Calendar dates:", start, end);
-
     const params = {
       text: `Boda de ${coupleName}`,
       dates: `${start}/${end}`,

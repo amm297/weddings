@@ -22,7 +22,6 @@ export function WeddingLayout({
   sectionStyle,
   icon,
 }: WeddingLayoutProps) {
-  console.log(icon);
   const hasBackgroundImage =
     Boolean(sectionStyle?.image) &&
     sectionStyle?.imagePosition === "background";

@@ -42,7 +42,6 @@ export function Info({ isEven, id }: { isEven: boolean; id: string }) {
   };
 
   const renderCTAItem = (item: SectionCTA, index: number) => {
-    console.log("CTA", item);
     return (
       <Button key={`cta-${index}`} variant="default" asChild>
         <Link href={item.link} target={item.target}>
