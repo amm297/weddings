@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "bun:dev": "bunx --bun next dev -p 9002",
+    "dev:ngrok": "/usr/local/bin/ngrok http 9002 --log=stdout",
+    "dev:all": "concurrently -n \"NEXT,NGROK\" -c \"blue,magenta\" \"bun run dev\" \"bun run dev:ngrok\"",
     "build": "bun run next build && cp -r wedding_data out/wedding_data",
     "start": "bun run next start",
     "lint": "bun run next lint",
