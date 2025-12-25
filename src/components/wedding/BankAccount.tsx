@@ -9,10 +9,11 @@ import { cn } from "@/lib/utils";
 export function BankAccount({ isEven }: { isEven: boolean }) {
   const section = useWeddingSection("bankaccount") as BankAccountSection;
 
-  const { title, description, bankAccount, style, icon } = section;
+  const { title, description, bankAccount, bankAccounts, style, icon } =
+    section;
   const hasBackgroundImage = Boolean(style?.image);
 
-  if (!title || !bankAccount) return null;
+  if (!title || (!bankAccount && !bankAccounts)) return null;
 
   const renderDescriptionItem = (
     item: string | DescriptionItem,
@@ -52,7 +53,13 @@ export function BankAccount({ isEven }: { isEven: boolean }) {
       icon={icon}
     >
       <div className="max-w-2xl mx-auto">{renderDescription()}</div>
-      <BankAccountItem bankAccount={bankAccount} />
+      {bankAccounts?.map((bankAccount) => (
+        <BankAccountItem
+          key={bankAccount.accountNumber}
+          bankAccount={bankAccount}
+        />
+      ))}
+      {bankAccount && <BankAccountItem bankAccount={bankAccount} />}
     </WeddingLayout>
   );
 }

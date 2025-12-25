@@ -22,7 +22,6 @@ export function ImageSection({ id, isEven }: { id: string; isEven: boolean }) {
     }
 
     if (typeof item === "object" && item?.dateFormat && item?.date) {
-      console.log(item);
       return (
         <p
           key={`ba-desc-${index}`}
@@ -40,7 +39,7 @@ export function ImageSection({ id, isEven }: { id: string; isEven: boolean }) {
       return (
         <p
           key={`ba-desc-${index}`}
-          className={cn(item.itemStyle)}
+          className={(cn(item.itemStyle))}
           dangerouslySetInnerHTML={{ __html: item.text! }}
         />
       );

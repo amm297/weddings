@@ -138,7 +138,8 @@ export interface Hotel {
 }
 
 export interface BankAccountSection extends Section {
-  bankAccount: BankAccount;
+  bankAccount?: BankAccount;
+  bankAccounts?: BankAccount[];
 }
 export interface BankAccount {
   buttonText?: string;

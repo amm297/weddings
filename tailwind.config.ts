@@ -21,6 +21,7 @@ export default {
         kromosius: ["Kromosius", "sans-serif"],
         hoves: ["TT Hoves Pro Trial", "sans-serif"],
         wallpaper: ["Wallpaper", "sans-serif"],
+        
       },
       fontSize: {
         imgDate: "1.1rem",
