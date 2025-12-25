@@ -13,7 +13,7 @@ export function Sides({ isEven }: { isEven: boolean }) {
     <WeddingLayout id="sides" isEven={isEven}>
       <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
         {sections?.map((section, idx) => (
-          <SideSection section={section} index={idx} />
+          <SideSection key={section.id} section={section} index={idx} />
         ))}
       </div>
     </WeddingLayout>
