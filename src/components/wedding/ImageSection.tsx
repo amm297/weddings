@@ -22,12 +22,27 @@ export function ImageSection({ id, isEven }: { id: string; isEven: boolean }) {
     }
 
     if (typeof item === "object" && item?.dateFormat && item?.date) {
+      console.log(item);
       return (
-        <p key={`ba-desc-${index}`}>
+        <p
+          key={`ba-desc-${index}`}
+          className="text-imgDate text-primary"
+          // className={cn(item.itemStyle, "text-imgDate text-primary")}
+        >
           {formatDate(item?.date, item?.dateFormat, {
             timezone: item?.timezone,
           })}
         </p>
+      );
+    }
+
+    if (item.html) {
+      return (
+        <p
+          key={`ba-desc-${index}`}
+          className={cn(item.itemStyle)}
+          dangerouslySetInnerHTML={{ __html: item.text! }}
+        />
       );
     }
 

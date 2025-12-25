@@ -10,7 +10,7 @@ import Link from "next/link";
 export function Info({ isEven, id }: { isEven: boolean; id: string }) {
   const section = useWeddingSection(id) as Section;
 
-  const { title, description, style, icon, cta } = section;
+  const { title, subtitle, description, style, icon, cta } = section;
 
   const renderDescriptionItem = (
     item: string | DescriptionItem,
@@ -59,7 +59,14 @@ export function Info({ isEven, id }: { isEven: boolean; id: string }) {
     return renderCTAItem(cta as SectionCTA, 0);
   };
   return (
-    <WeddingLayout id={id} isEven={isEven} sectionStyle={style} icon={icon}>
+    <WeddingLayout
+      id={id}
+      isEven={isEven}
+      title={title}
+      subtitle={subtitle}
+      sectionStyle={style}
+      icon={icon}
+    >
       <div className="max-w-2xl mx-auto">{renderDescription()}</div>
       <div className="flex flex-col md:flex-row justify-center gap-4">
         {renderCTA()}

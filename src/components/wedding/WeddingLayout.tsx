@@ -65,14 +65,15 @@ export function WeddingLayout({
         >
           <h2
             className={cn(
-              "text-3xl md:text-5xl font-sectionHeadline uppercase tracking-wider mb-2",
+              "text-3xl md:text-5xl font-sectionHeadline tracking-wider mb-2",
               "text-center",
               !hasSideImage && "md:text-center",
               hasSideImage && imagePosition === "left" && "md:text-right",
               hasSideImage && imagePosition === "right" && "md:text-left",
               hasBackgroundImage
                 ? "text-white drop-shadow-md"
-                : "text-foreground"
+                : "text-foreground",
+              "text-primary"
             )}
           >
             {title}

@@ -69,6 +69,7 @@ export interface DescriptionItem {
   itemStyle?: string;
   dateFormat?: string;
   timezone?: string;
+  html?: boolean;
 }
 export interface SectionStyle {
   texture?: string;
