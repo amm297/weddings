@@ -142,6 +142,7 @@ export interface BankAccountSection extends Section {
   bankAccounts?: BankAccount[];
 }
 export interface BankAccount {
+  holderName: string;
   buttonText?: string;
   accountNumber: string;
 }

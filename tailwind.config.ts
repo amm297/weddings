@@ -6,6 +6,8 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./.wedding-data.json",
+    "./wedding_data/**/*.json",
   ],
   theme: {
     fontFamily: {
@@ -21,7 +23,6 @@ export default {
         kromosius: ["Kromosius", "sans-serif"],
         hoves: ["TT Hoves Pro Trial", "sans-serif"],
         wallpaper: ["Wallpaper", "sans-serif"],
-        
       },
       fontSize: {
         imgDate: "1.1rem",
