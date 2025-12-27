@@ -16,7 +16,7 @@ export const BankAccountItem = ({
 
   const renderHolderName = () => {
     if (holderName) {
-      return <p className="text-foreground/80 text-center">({holderName})</p>;
+      return <p className="text-foreground/80 text-center">{holderName}</p>;
     }
     return "";
   };
